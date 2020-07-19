@@ -11,6 +11,8 @@ BUILD_SUBDIR="build"
 
 export CI=true
 
+./update-env.sh
+
 cd $SOURCE_DIR
 # npm ci
 npm i

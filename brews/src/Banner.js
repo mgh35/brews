@@ -1,12 +1,12 @@
 import React from 'react';
 import {AmplifySignOut } from '@aws-amplify/ui-react';
 
-import classes from './Banner.css';
+import styles from './Banner.module.css';
 
 
 function Banner() {
   return (
-    <div className="Banner">
+    <div className={styles.banner}>
         BREWS
         <AmplifySignOut />
     </div>

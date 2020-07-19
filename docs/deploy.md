@@ -58,18 +58,17 @@ expected.
 
 ## Deploy the frontend
 
-First, make sure to update the `.env` file (which includes the references to AWS infra
-needed by the app):
-
-```bash
-./update-env.sh
-```
-
-Then build and deploy with:
+Deploy the frontend app with:
 
 ```bash
 ./deploy.sh
 ```
+
+This will:
+- Update the `.env` file with the latest state (see `./update-env.sh`)
+- Run a production build and test
+- Push the built artifact to S3
+- Invalidate the CloundFront caches so the new artifact is picked up
 
 # Run the app
 
