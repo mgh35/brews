@@ -1,5 +1,5 @@
 provider "aws" {
-    region = "ca-central-1"
+    region = var.region
 }
 
 # resource "random_id" "frontend_bucket_name" {

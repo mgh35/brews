@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import Brews from './Brews';
+import App from './App';
 
 ReactDOM.render(
   <React.StrictMode>
-    <Brews />
+    <App />
   </React.StrictMode>,
   document.getElementById('root')
 );

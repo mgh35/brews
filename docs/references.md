@@ -14,6 +14,10 @@ https://aws.amazon.com/getting-started/hands-on/build-react-app-amplify-graphql/
 
 https://docs.amplify.aws/start/q/integration/react
 
+https://medium.com/@mim3dot/aws-amplify-pros-and-cons-bf77a98da5db
+
+https://docs.amplify.aws/lib/q/platform/js
+
 ## Terraform Setup
 
 https://rangle.io/blog/frontend-app-in-aws-with-terraform/

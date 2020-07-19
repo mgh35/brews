@@ -2,6 +2,8 @@ variable "app" {}
 
 variable "env" {}
 
+variable "region" {}
+
 variable "frontend_bucket" {}
 
 variable "cache_default_ttl" {

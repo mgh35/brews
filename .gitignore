@@ -2,3 +2,6 @@
 .terraform/
 *.tfstate*
 *.tfplan
+
+# Env
+.env*
