@@ -22,6 +22,6 @@ output "user_pool_client_id" {
   value = aws_cognito_user_pool_client.users.id
 }
 
-output "user_pool_domain" {
-  value = "https://${aws_cognito_user_pool_domain.users.domain}.auth.${var.region}.amazoncognito.com"
+output "identity_pool_id" {
+  value = aws_cognito_identity_pool.users.id
 }

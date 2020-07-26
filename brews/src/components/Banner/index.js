@@ -1,7 +1,7 @@
 import React from 'react';
 import {AmplifySignOut } from '@aws-amplify/ui-react';
 
-import styles from './Banner.module.css';
+import styles from './styles.module.css';
 
 
 function Banner() {

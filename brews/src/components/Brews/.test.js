@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import Brews from './Brews';
+import Brews from '.';
 
 describe("Brews", () => {
   it("renders 3 divs", () => {
