@@ -4,15 +4,14 @@ import AWS from 'aws-sdk';
 import Amplify, {Auth} from 'aws-amplify';
 import { withAuthenticator } from '@aws-amplify/ui-react';
 
-import awsAmplifyConfig from 'config/aws-amplify-config.json';
-import awsSdkConfig from 'config/aws-sdk-config.json';
+import config from 'config.js';
 
 import AddBrew from 'components/AddBrew';
 import Banner from 'components/Banner';
 import Brews from 'components/Brews';
 
-AWS.config.update(awsSdkConfig);
-Amplify.configure(awsAmplifyConfig);
+AWS.config.update(config.AWS_SDK_CONFIG);
+Amplify.configure(config.AWS_AMPLIFY_CONFIG);
 
 class App extends React.Component {
   constructor(props) {

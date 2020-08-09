@@ -1,5 +1,5 @@
-resource "aws_s3_bucket" "frontend" {
-  bucket        = var.frontend_bucket
+resource aws_s3_bucket "frontend" {
+  bucket        = local.storage_bucket
   acl           = "private"
   force_destroy = true
   policy = <<EOF
@@ -11,14 +11,14 @@ resource "aws_s3_bucket" "frontend" {
       "Sid": "bucket_policy_site_root",
       "Action": ["s3:ListBucket"],
       "Effect": "Allow",
-      "Resource": "arn:aws:s3:::${var.frontend_bucket}",
+      "Resource": "arn:aws:s3:::${local.storage_bucket}",
       "Principal": {"AWS":"${aws_cloudfront_origin_access_identity.frontend.iam_arn}"}
     },
     {
       "Sid": "bucket_policy_site_all",
       "Action": ["s3:GetObject"],
       "Effect": "Allow",
-      "Resource": "arn:aws:s3:::${var.frontend_bucket}/*",
+      "Resource": "arn:aws:s3:::${local.storage_bucket}/*",
       "Principal": {"AWS":"${aws_cloudfront_origin_access_identity.frontend.iam_arn}"}
     }
   ]

@@ -39,15 +39,15 @@ First thing is to set up an appropriate environment. I am currently following:
 }
 ```
 * In the local terminal, configured perms through `aws configure`.
+* For the development environment, create a separate profile called `development`
+    * Can have anything as the Access Key ID and Secret Access Key, but has to have something
 
-## Build AWS Infrastructure
+## Deploy
 
-All of the AWS infrastructure can be setup with Terraform. Once the AWS perms are
-configured as above, run:
+Deploy is done by:
 
 ```bash
-cd terraform
-terraform apply
+./spin-up.sh production
 ```
 
 Note: Until the S3 bucket's name has propagated through the AWS DNS (which apparently
@@ -56,26 +56,12 @@ regional bucket URL. (And because this isn't being exposed in Brew's setup, that
 throw an AccessDenied.) But once the DNS entry has propagated, it should work as
 expected.
 
-## Deploy the frontend
-
-Deploy the frontend app with:
-
-```bash
-./deploy.sh
-```
-
-This will:
-- Update the `.env` file with the latest state (see `./update-env.sh`)
-- Run a production build and test
-- Push the built artifact to S3
-- Invalidate the CloundFront caches so the new artifact is picked up
-
 # Run the app
 
 Create a user with:
 
 ```bash
-./create-user.sh
+./create-user.sh production
 ```
 
 and follow the prompts. (Note: It's set up that all users need to be created manually
@@ -84,5 +70,5 @@ like this.) Cognito will email the temporary password.
 Then open the app in the browser
 
 ```bash
-./tf-out.sh | jq .cloudfront_domain.value -r
+./open-app.sh
 ```

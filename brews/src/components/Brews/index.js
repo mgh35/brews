@@ -37,8 +37,10 @@ class Brews extends React.Component {
       return (
         <table>
             <thead>
-              <td>Time</td>
-              <td>Comment</td>
+              <tr>
+                <td>Time</td>
+                <td>Comment</td>
+              </tr>
             </thead>
             <tbody>
             {

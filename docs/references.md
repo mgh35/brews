@@ -27,3 +27,15 @@ https://github.com/rangle/tutorial-frontend-site-terraform
 https://www.davidbegin.com/deploying-a-react-app-to-s3-with-terrraform-and-bash/
 
 https://notes.webutvikling.org/s3-bucket-cloudfront-using-terraform/
+
+## DynamoDB
+
+https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.html
+
+https://www.alexdebrie.com/posts/dynamodb-single-table/
+
+https://www.youtube.com/watch?v=HaEPXoXVf2k
+
+# React
+
+https://reactjs.org/docs/react-component.html

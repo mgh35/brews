@@ -7,7 +7,7 @@
 *.tfplan
 
 # Env
-aws-*-config.json
+.env.*
 
 # Build Artifacts
 node_modules/

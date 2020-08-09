@@ -2,7 +2,7 @@
 set -e
 cd "$(dirname "$0")"
 
-TF_OUT=$(./tf_out.sh)
+TF_OUT=$(./tf-out.sh)
 DOMAIN=$(echo $TF_OUT | jq .cloudfront_domain.value -r)
 
-curl https://${DOMAIN}
+open -a "Google Chrome" https://${DOMAIN}

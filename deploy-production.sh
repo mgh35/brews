@@ -2,7 +2,8 @@
 set -e
 cd "$(dirname "$0")"
 
-TF_OUT=$(./tf_out.sh)
+ENV=production
+TF_OUT=$(./tf-out.sh $ENV)
 FRONTEND_BUCKET=$(echo $TF_OUT | jq .frontend_bucket.value -r)
 CLOUDFRONT_DISTRIBUTION_ID=$(echo $TF_OUT | jq .cloudfront_distribution_id.value -r)
 
@@ -11,7 +12,7 @@ BUILD_SUBDIR="build"
 
 export CI=true
 
-./update-env.sh
+./update-config.sh $ENV
 
 cd $SOURCE_DIR
 # npm ci

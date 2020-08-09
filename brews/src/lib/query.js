@@ -1,10 +1,15 @@
 import { Auth } from 'aws-amplify';
 import DynamoDB from 'aws-sdk/clients/dynamodb';
 
+import config from 'config.js';
+
+
 function db(credentials) {
-    return new DynamoDB.DocumentClient({
-        credentials: Auth.essentialCredentials(credentials)
-    });
+    const params = config.DYNAMODB_CONFIG;
+    if (!params.accessKeyId) {
+        params.credentials = Auth.essentialCredentials(credentials)
+    }
+    return new DynamoDB.DocumentClient(params);
 }
 
 export function userBrews(user) {
