@@ -62,3 +62,28 @@ is like a separate sandbox. So if you, eg, create a table with one set of creden
 you will only be able to see it when using those same credentials.
 2) It doesn't add the CORS header to errors. So on an error you will actually see a
 CORS error and not the real error. (This even though CORS is fine on a successful call.)
+
+# 2020-08-15
+
+Finding it difficult to find a standard run configuration for VS Code. Getting all sorts
+of setups from different people. This works for me:
+```json
+    {
+        "type": "node",
+        "request": "launch",
+        "name": "Jest Tests",
+        "runtimeExecutable": "${workspaceRoot}/brews/node_modules/.bin/react-scripts",
+        "args": [
+            "test",
+            "--runInBand"
+        ],
+        "cwd": "${workspaceFolder}/brews",
+        "env": {
+            "CI": "true"
+        }
+    }
+```
+Particularly:
+- Need to run `react-scripts`. Doesn't seem to pick up the config in `package.json`?
+- Need to set `cwd` since I have the frontend code in a subfolder.
+- Need to set `CI` = `true` to avoid tests starting in watch mode.

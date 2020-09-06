@@ -45,6 +45,7 @@ EOF
 fi
 
 cd brews
+true > $ENV_FILE
 echo "REACT_APP_AWS_SDK_CONFIG='$(echo $AWS_SDK_CONFIG | jq -c)'" >> $ENV_FILE
 echo "REACT_APP_AWS_AMPLIFY_CONFIG='$(echo $AWS_AMPLIFY_CONFIG | jq -c)'" >> $ENV_FILE
 echo "REACT_APP_DYNAMODB_CONFIG='$(echo $DYNAMODB_CONFIG | jq -c)'" >> $ENV_FILE

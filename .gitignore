@@ -7,7 +7,7 @@
 *.tfplan
 
 # Env
-.env.*
+.env*
 
 # Build Artifacts
 node_modules/

@@ -1,16 +1,26 @@
-import React from 'react';
+import React, {Component} from 'react';
 
-import {userBrews} from 'lib/query';
+import {userBrews} from 'libs/query';
+import Brew from 'models/brew';
+import {User} from 'models/user';
 
-class Brews extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      error: null,
-      isLoaded: false,
-      brews: []
-    };
-  }
+
+type Props = {
+  user: User
+}
+
+type State = {
+  error: Error | null,
+  isLoaded: boolean,
+  brews: Brew[]
+}
+
+class BrewList extends Component<Props, State> {
+  state = {
+    error: null,
+    isLoaded: false,
+    brews: []
+  };
 
   componentDidMount() {
     userBrews(this.props.user)
@@ -18,9 +28,6 @@ class Brews extends React.Component {
         this.setState({brews})
       })
       .catch(error => {
-        if (typeof error !== Error) {
-          error = Error(error);
-        }
         console.error(error)
         this.setState({error});
       })
@@ -28,10 +35,9 @@ class Brews extends React.Component {
   }
 
   render() {
-    const {error, isLoaded, brews} = this.state;
-    if (error) {
-      return <div style={{color: 'red'}}>{error.name}: {error.message}</div>;
-    } else if (!isLoaded) {
+    if (this.state.error) {
+      return <div style={{color: 'red'}}>Some error</div>;
+    } else if (!this.state.isLoaded) {
       return <div>Loading...</div>;
     } else {
       return (
@@ -44,8 +50,8 @@ class Brews extends React.Component {
             </thead>
             <tbody>
             {
-              brews.map(brew =>
-                <tr>
+              this.state.brews.map((brew: Brew) =>
+                <tr key={brew.timestamp} className="brew">
                   <td>{brew.timestamp}</td>
                   <td>{brew.comment}</td>
                 </tr>
@@ -58,4 +64,4 @@ class Brews extends React.Component {
   }
 }
 
-export default Brews;
+export default BrewList;
