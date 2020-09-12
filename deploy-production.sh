@@ -7,7 +7,7 @@ TF_OUT=$(./tf-out.sh $ENV)
 FRONTEND_BUCKET=$(echo $TF_OUT | jq .frontend_bucket.value -r)
 CLOUDFRONT_DISTRIBUTION_ID=$(echo $TF_OUT | jq .cloudfront_distribution_id.value -r)
 
-SOURCE_DIR="brews"
+SOURCE_DIR="frontend"
 BUILD_SUBDIR="build"
 
 export CI=true

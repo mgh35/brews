@@ -44,7 +44,7 @@ EOF
 )
 fi
 
-cd brews
+cd frontend
 true > $ENV_FILE
 echo "REACT_APP_AWS_SDK_CONFIG='$(echo $AWS_SDK_CONFIG | jq -c)'" >> $ENV_FILE
 echo "REACT_APP_AWS_AMPLIFY_CONFIG='$(echo $AWS_AMPLIFY_CONFIG | jq -c)'" >> $ENV_FILE
