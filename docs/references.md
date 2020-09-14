@@ -36,6 +36,41 @@ https://www.alexdebrie.com/posts/dynamodb-single-table/
 
 https://www.youtube.com/watch?v=HaEPXoXVf2k
 
-# React
+
+# Frontend
+
+## React
 
 https://reactjs.org/docs/react-component.html
+
+## Redux
+
+https://redux.js.org/
+
+https://redux.js.org/advanced/async-actions
+
+https://www.youtube.com/watch?v=_OfJZfmZCgU
+
+https://www.youtube.com/watch?v=AslncyG8whg
+
+https://blog.logrocket.com/data-fetching-in-redux-apps-a-100-correct-approach-4d26e21750fc/
+
+https://github.com/redux-saga/redux-saga
+
+## Testing
+
+https://medium.com/@rickhanlonii/understanding-jest-mocks-f0046c68e53c
+
+https://codeburst.io/how-to-call-api-in-a-smart-way-2ca572c6fe86
+
+https://blog.bitsrc.io/7-react-testing-libraries-you-should-know-b20ca97422a4
+
+https://redux-saga.js.org/docs/advanced/Testing.html
+
+https://blog.scottlogic.com/2018/01/16/evaluating-redux-saga-test-libraries.html
+
+https://github.com/wix/redux-saga-tester
+
+https://medium.com/@radzserg/how-to-test-redux-saga-with-dependencies-b3f21aa3c240
+
+https://github.com/freshollie/jest-dynalite

@@ -27,6 +27,9 @@ const BrewList: FunctionComponent<Props> = ({brews, fetchBrews}) => <>
         {
             fetchBrews.isRunning && <div>Fetching ...</div>
         }
+        {
+            fetchBrews.error && <div>Error: {fetchBrews.error}</div>
+        }
         </tbody>
     </table>
 </>;

@@ -127,23 +127,23 @@ really a trio React + Redux + API Middleware.
 
 As I currently understand it, I think the end-to-end data flow is supposed to look like:
 ```text
------------------------------------------------
-                       |
-          API          |       ---DOM <---
-                       |      |           |
-------------------------------|-----------|----
-                       |      |           V
-         Redux         |      |      -> STATE
-                       |      |    /       ^
-------------------------------|---/--------|---
-                       |      v  /         |
- Redux API Middleware  |     ACTION <--> ACTION
-                       |     ^ ^ ^
------------------------------|-|-|-------------
-                       |     v v v
-          API          |    ENDPOINTS
-                       |
------------------------------------------------
+-------------------------------------------------------------------
+                       |                        |
+          API          |       ---DOM <---      |       Pure
+                       |      |           |     |
+------------------------------|-----------|------------------------
+                       |      |           V     |
+         Redux         |      |      -> STATE   |       Pure
+                       |      |    /       ^    |
+------------------------------|---/--------|-----------------------
+                       |      v  /         |    |
+ Redux API Middleware  |     ACTION <--> ACTION |      Impure
+                       |     ^ ^ ^              |
+-----------------------------|-|-|---------------------------------
+                       |     v v v              |
+          API          |    ENDPOINTS           |    Way Impure
+                       |                        |
+-------------------------------------------------------------------
 ```
 
 The key point of the API Middleware is as a place where the sequenced flow talking to

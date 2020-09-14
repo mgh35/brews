@@ -6,8 +6,10 @@ import { RootState } from 'store';
 
 export default function(elem: React.ReactElement, initialState: RootState) {
     return render(<>
-        <Provider store={configureStore([])(initialState)}>
-            {elem}
-        </Provider>
+        <React.StrictMode>
+            <Provider store={configureStore()(initialState)}>
+                {elem}
+            </Provider>
+        </React.StrictMode>
     </>);
 };

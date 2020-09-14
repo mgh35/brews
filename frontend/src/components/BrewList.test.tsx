@@ -1,16 +1,23 @@
 import React from 'react';
 import render from 'testing/render';
-import App from 'components/App';
-import Brew from 'models/Brew';
 import { RenderResult } from '@testing-library/react';
+import BrewList from './BrewList';
 
 describe('BrewList', () => {
     describe('with no brews', () => {
         let rendered: RenderResult;
         beforeEach(() => {
-            rendered = render(<App />, {
+            rendered = render(<BrewList />, {
                 brewList: {
-                    all: []
+                    addBrew: {
+                        isRunning: false,
+                        error: null
+                    },
+                    fetchBrews: {
+                        isRunning: false,
+                        error: null
+                    },
+                    all: [],
                 }
             });
         });
@@ -29,12 +36,20 @@ describe('BrewList', () => {
     describe('with 2 brews', () => {
         let rendered: RenderResult;
         beforeEach(() => {
-            rendered = render(<App />, {
+            rendered = render(<BrewList />, {
                 brewList: {
+                    addBrew: {
+                        isRunning: false,
+                        error: null
+                    },
+                    fetchBrews: {
+                        isRunning: false,
+                        error: null
+                    },
                     all: [
-                        new Brew('2020-09-06T09:00:00+0000', 'brew 1'),
-                        new Brew('2020-09-06T09:05:00+0000', 'brew 2'),
-                    ]
+                        {timestamp: '2020-09-06T09:00:00+0000', comment: 'brew 1'},
+                        {timestamp: '2020-09-06T09:05:00+0000', comment: 'brew 2'},
+                    ],
                 }
             });
         });

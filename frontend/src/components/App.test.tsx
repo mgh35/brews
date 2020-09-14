@@ -1,16 +1,28 @@
 import React from 'react';
 import render from 'testing/render';
-import App from 'components/App';
+import { UnauthedApp } from 'components/App';
+import { StateBuilder } from 'testing/state';
 
 describe('App', () => {
-  it('can be rendered', () => {
-    const { container } = render(<App />,
-      {
-        brewList: {
-          all: []
-        }
-      }
-    );
-    expect(container).toBeDefined();
+  let appElem: HTMLElement;
+  beforeAll(() => {
+    const { container } = render(<UnauthedApp />, new StateBuilder().build());
+    appElem = container
+  })
+  it('renders', () => {
+    expect(appElem).toBeDefined();
   });
+
+  it('has Header element', () => {
+    expect(appElem.querySelector("Header")).toBeDefined();
+  });
+
+  it('has AddBrew element', () => {
+    expect(appElem.querySelector("AddBrew")).toBeDefined();
+  });
+
+  it('has BrewList element', () => {
+    expect(appElem.querySelector("BrewList")).toBeDefined();
+  });
+
 });

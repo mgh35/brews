@@ -25,7 +25,12 @@ const AddBrew: FunctionComponent<Props> = ({addBrew, addBrewRequested}) => {
     };
     return <>
         <AddBrewForm onSubmit={onSubmit} />
-        {addBrew.isRunning && <div>Adding ...</div>}
+        {
+            addBrew.isRunning && <div>Adding ...</div>
+        }
+        {
+            addBrew.error && <div>Error: {addBrew.error}</div>
+        }
     </>;
 };
 
