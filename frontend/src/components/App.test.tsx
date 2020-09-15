@@ -18,7 +18,7 @@ describe("App", () => {
   });
 
   it("has AddBrew element", () => {
-    expect(appElem.querySelector("AddBrew")).toBeDefined();
+    expect(appElem.querySelector("BrewInputPanel")).toBeDefined();
   });
 
   it("has BrewList element", () => {

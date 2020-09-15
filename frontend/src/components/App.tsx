@@ -4,13 +4,13 @@ import { withAuthenticator } from "@aws-amplify/ui-react";
 
 import Header from "components/Header";
 import BrewList from "components/BrewList";
-import AddBrew from "components/AddBrew";
+import BrewInputPanel from "components/BrewInputPanel";
 
 export function UnauthedApp() {
   return (
     <div className="App">
       <Header />
-      <AddBrew />
+      <BrewInputPanel />
       <BrewList />
     </div>
   );

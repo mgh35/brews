@@ -1,11 +1,9 @@
 import { combineReducers } from "redux";
-import { reducer as formReducer } from "redux-form";
 import authReducer from "./auth/reducer";
 import brewListReducer from "./brewList/reducer";
 import { SWITCH_USER } from "./auth/types";
 
 const appReducer = combineReducers({
-  form: formReducer,
   auth: authReducer,
   brewList: brewListReducer,
 });
