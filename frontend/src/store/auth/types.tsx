@@ -1,16 +1,16 @@
-import User from 'models/User';
+import User from "models/User";
 
-export const SWITCH_USER = 'SWITCH_USER';
+export const SWITCH_USER = "SWITCH_USER";
 
-export type PossibleUser = User | null
+export type PossibleUser = User | null;
 
 interface SwitchUserAction {
-    type: typeof SWITCH_USER,
-    user: PossibleUser
-};
+  type: typeof SWITCH_USER;
+  user: PossibleUser;
+}
 
 export type AuthAction = SwitchUserAction;
 
 export interface AuthState {
-    user: PossibleUser
-};
+  user: PossibleUser;
+}

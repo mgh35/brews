@@ -37,4 +37,3 @@ elif [ "$ENV" = "development" ]; then
     )
     echo "Created table:\n$CREATED_TABLE"
 fi
-

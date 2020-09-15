@@ -1,12 +1,10 @@
-import React from 'react';
+import React from "react";
 
-import { withAuthenticator } from '@aws-amplify/ui-react';
+import { withAuthenticator } from "@aws-amplify/ui-react";
 
-import Header from 'components/Header';
-import BrewList from 'components/BrewList';
-import AddBrew from 'components/AddBrew';
-
-
+import Header from "components/Header";
+import BrewList from "components/BrewList";
+import AddBrew from "components/AddBrew";
 
 export function UnauthedApp() {
   return (
@@ -16,6 +14,6 @@ export function UnauthedApp() {
       <BrewList />
     </div>
   );
-};
+}
 
 export default withAuthenticator(UnauthedApp);

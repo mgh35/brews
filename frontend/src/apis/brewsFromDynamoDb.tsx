@@ -1,58 +1,57 @@
-import { Auth } from 'aws-amplify';
-import DynamoDB from 'aws-sdk/clients/dynamodb';
+import { Auth } from "aws-amplify";
+import DynamoDB from "aws-sdk/clients/dynamodb";
 
-import config from 'config';
+import config from "config";
 
-import User, { Credentials } from 'models/User';
-import Brew from 'models/Brew';
-import { BrewsApi } from 'apis';
-
+import User, { Credentials } from "models/User";
+import Brew from "models/Brew";
+import { BrewsApi } from "apis";
 
 export class BrewsFromDynamoDb implements BrewsApi {
-    fetchBrewsForUser(user: User) {
-        return this._db(user.credentials)
-            .query({
-                TableName: 'Brews',
-                KeyConditionExpression: 'client_id = :client_id',
-                ExpressionAttributeValues: {
-                    ':client_id': user.id
-                }
-            })
-            .promise()
-            .then(response => {
-                return response.Items ? response.Items.map(this._makeBrewFromItem) : []
-            });
-    };
+  fetchBrewsForUser(user: User) {
+    return this._db(user.credentials)
+      .query({
+        TableName: "Brews",
+        KeyConditionExpression: "client_id = :client_id",
+        ExpressionAttributeValues: {
+          ":client_id": user.id,
+        },
+      })
+      .promise()
+      .then((response) => {
+        return response.Items ? response.Items.map(this._makeBrewFromItem) : [];
+      });
+  }
 
-    addBrewForUser(user: User, brew: Brew) {
-        return this._db(user.credentials)
-            .put({
-                TableName: "Brews",
-                Item: this._makeItemFromBrew(user, brew)
-            })
-            .promise()
-            .then(() => true);
-    };
+  addBrewForUser(user: User, brew: Brew) {
+    return this._db(user.credentials)
+      .put({
+        TableName: "Brews",
+        Item: this._makeItemFromBrew(user, brew),
+      })
+      .promise()
+      .then(() => true);
+  }
 
-    _db(credentials: Credentials): DynamoDB.DocumentClient {
-        const params = config.DYNAMODB_CONFIG;
-        if (!params.accessKeyId && params.region !== 'local') {
-            params.credentials = Auth.essentialCredentials(credentials);
-        }
-        return new DynamoDB.DocumentClient(params);
-    };
+  _db(credentials: Credentials): DynamoDB.DocumentClient {
+    const params = config.DYNAMODB_CONFIG;
+    if (!params.accessKeyId && params.region !== "local") {
+      params.credentials = Auth.essentialCredentials(credentials);
+    }
+    return new DynamoDB.DocumentClient(params);
+  }
 
-    _makeItemFromBrew(user: User, brew: Brew): any {
-        return {
-            client_id: user.id,
-            ...brew
-        }
+  _makeItemFromBrew(user: User, brew: Brew): any {
+    return {
+      client_id: user.id,
+      ...brew,
     };
-    
-    _makeBrewFromItem(item: any): Brew {
-        return {
-            timestamp: item.timestamp,
-            comment: item.comment
-        }
+  }
+
+  _makeBrewFromItem(item: any): Brew {
+    return {
+      timestamp: item.timestamp,
+      comment: item.comment,
     };
+  }
 }
