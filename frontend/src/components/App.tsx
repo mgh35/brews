@@ -1,4 +1,5 @@
 import React from "react";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 
 import { withAuthenticator } from "@aws-amplify/ui-react";
 
@@ -8,11 +9,22 @@ import BrewInputPanel from "components/BrewInputPanel";
 
 export function UnauthedApp() {
   return (
-    <div className="App">
-      <Header />
-      <BrewInputPanel />
-      <BrewList />
-    </div>
+    <>
+      <BrowserRouter>
+        <Header />
+        <Switch>
+          <Route exact path="/">
+            <div>Welcome!</div>
+          </Route>
+          <Route exact path="/add">
+            <BrewInputPanel />
+          </Route>
+          <Route exact path="/list">
+            <BrewList />
+          </Route>
+        </Switch>
+      </BrowserRouter>
+    </>
   );
 }
 

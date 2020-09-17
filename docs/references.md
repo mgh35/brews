@@ -36,7 +36,6 @@ https://www.alexdebrie.com/posts/dynamodb-single-table/
 
 https://www.youtube.com/watch?v=HaEPXoXVf2k
 
-
 # Frontend
 
 ## React
@@ -74,3 +73,9 @@ https://github.com/wix/redux-saga-tester
 https://medium.com/@radzserg/how-to-test-redux-saga-with-dependencies-b3f21aa3c240
 
 https://github.com/freshollie/jest-dynalite
+
+# UI
+
+https://react-bootstrap.github.io/components
+
+https://serverless-stack.com/chapters/handle-routes-with-react-router.html

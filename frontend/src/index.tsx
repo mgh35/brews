@@ -9,6 +9,8 @@ import config from "config";
 import configureStore from "configureStore";
 import AmplifyBridge from "store/AmplifyBridge";
 
+import "bootstrap/dist/css/bootstrap.min.css";
+
 AWS.config.update(config.AWS_SDK_CONFIG);
 Amplify.configure(config.AWS_AMPLIFY_CONFIG);
 
