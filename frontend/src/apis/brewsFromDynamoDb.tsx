@@ -58,6 +58,6 @@ export class BrewsFromDynamoDb implements BrewsApi {
       .withBrewTimeInSeconds(item.brewTimeInSeconds)
       .withWaterWeightInGrams(item.waterWeightInGrams)
       .withComment(item.comment)
-      .create();
+      .build();
   }
 }

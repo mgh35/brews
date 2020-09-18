@@ -66,7 +66,7 @@ export class BrewBuilder {
     return this;
   }
 
-  create(): Brew {
+  build(): Brew {
     return {
       timestamp: this.timestamp,
       bean: this.bean,

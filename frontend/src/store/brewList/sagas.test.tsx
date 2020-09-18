@@ -2,7 +2,7 @@ import { getSagaTester, RootSagaTester } from "testing/sagas";
 import { ADD_BREW_SUCCEEDED, ADD_BREW_FAILED } from "./types";
 import { addBrewRequested } from "./actions";
 import { addBrewSaga } from "./sagas";
-import Brew, { createBrew } from "models/Brew";
+import Brew, { BrewBuilder } from "models/Brew";
 import { BrewsFromMemory } from "testing/apis";
 import { StateBuilder } from "testing/state";
 import User from "models/User";
@@ -16,7 +16,7 @@ describe("addBrewSaga", () => {
     let tester: RootSagaTester;
 
     beforeAll(async () => {
-      brew = createBrew("blah");
+      brew = new BrewBuilder().withComment("blah").build();
       user = createTestUser();
 
       brewsApi = new BrewsFromMemory();
@@ -58,7 +58,9 @@ describe("addBrewSaga", () => {
       );
       tester.start(addBrewSaga);
 
-      tester.dispatch(addBrewRequested(createBrew("blah")));
+      tester.dispatch(
+        addBrewRequested(new BrewBuilder().withComment("blah").build())
+      );
       await tester.waitFor(ADD_BREW_FAILED);
     });
 

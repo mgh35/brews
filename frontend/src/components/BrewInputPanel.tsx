@@ -51,7 +51,7 @@ const BrewInputPanel: FunctionComponent<Props> = ({
             .withBloomTimeInSeconds(value("bloomTimeInSeconds"))
             .withBrewTimeInSeconds(value("brewTimeInSeconds"))
             .withWaterWeightInGrams(value("waterWeightInGrams"))
-            .create()
+            .build()
         );
       }}
     >

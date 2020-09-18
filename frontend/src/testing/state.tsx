@@ -4,12 +4,6 @@ import { BrewListState } from "store/brewList/types";
 import User from "models/User";
 import { createTestUser } from "./models";
 
-interface BrewListStateSlice {
-  brewList: BrewListState;
-}
-
-export type StateSlice = RootState | BrewListStateSlice | undefined;
-
 export const InitialState = Object.freeze(
   rootReducer(undefined, { type: SWITCH_USER, user: null })
 );
@@ -32,6 +26,13 @@ export class StateBuilder {
 
   withTestUser(): StateBuilder {
     this.withUser(createTestUser());
+    return this;
+  }
+
+  withBrewListState(brewListState: BrewListState) {
+    this.state = Object.assign({}, this.state, {
+      brewList: brewListState,
+    });
     return this;
   }
 

@@ -17,11 +17,11 @@ describe("App", () => {
     expect(appElem.querySelector("Header")).toBeDefined();
   });
 
-  it("has AddBrew element", () => {
-    expect(appElem.querySelector("BrewInputPanel")).toBeDefined();
+  it("does not have BrewInputPanel element", () => {
+    expect(appElem.querySelector("BrewInputPanel")).toBeNull();
   });
 
-  it("has BrewList element", () => {
-    expect(appElem.querySelector("BrewList")).toBeDefined();
+  it("does not BrewList element", () => {
+    expect(appElem.querySelector("BrewList")).toBeNull();
   });
 });
