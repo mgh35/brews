@@ -31,11 +31,9 @@ function* addBrew(action: AddBrewRequestedAction) {
     yield call(brewsApi.addBrewForUser.bind(brewsApi), user, action.brew);
     yield put(addBrewSucceeded());
     yield put(fetchBrewsRequested());
-  } catch (e) {
-    if (!(e instanceof Error)) {
-      e = new Error(e.toString());
-    }
-    yield put(addBrewFailed(e.message));
+  } catch (err) {
+    const message = err instanceof Error ? err.message : err.toString();
+    yield put(addBrewFailed(message));
   }
 }
 

@@ -4,7 +4,7 @@ import DynamoDB from "aws-sdk/clients/dynamodb";
 import config from "config";
 
 import User, { Credentials } from "models/User";
-import Brew from "models/Brew";
+import Brew, { BrewBuilder } from "models/Brew";
 import { BrewsApi } from "apis";
 
 export class BrewsFromDynamoDb implements BrewsApi {
@@ -49,9 +49,15 @@ export class BrewsFromDynamoDb implements BrewsApi {
   }
 
   _makeBrewFromItem(item: any): Brew {
-    return {
-      timestamp: item.timestamp,
-      comment: item.comment,
-    };
+    return new BrewBuilder(item.timestamp)
+      .withBean(item.bean)
+      .withBeanWeightInGrams(item.beanWeightInGrams)
+      .withGrinder(item.grinder)
+      .withGrindSetting(item.grindSetting)
+      .withBloomTimeInSeconds(item.bloomTimeInSeconds)
+      .withBrewTimeInSeconds(item.brewTimeInSeconds)
+      .withWaterWeightInGrams(item.waterWeightInGrams)
+      .withComment(item.comment)
+      .create();
   }
 }

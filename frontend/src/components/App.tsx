@@ -1,5 +1,6 @@
 import React from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
+import Container from "react-bootstrap/Container";
 
 import { withAuthenticator } from "@aws-amplify/ui-react";
 
@@ -12,17 +13,19 @@ export function UnauthedApp() {
     <>
       <BrowserRouter>
         <Header />
-        <Switch>
-          <Route exact path="/">
-            <div>Welcome!</div>
-          </Route>
-          <Route exact path="/add">
-            <BrewInputPanel />
-          </Route>
-          <Route exact path="/list">
-            <BrewList />
-          </Route>
-        </Switch>
+        <Container>
+          <Switch>
+            <Route exact path="/">
+              <div>Welcome!</div>
+            </Route>
+            <Route exact path="/add">
+              <BrewInputPanel />
+            </Route>
+            <Route exact path="/list">
+              <BrewList />
+            </Route>
+          </Switch>
+        </Container>
       </BrowserRouter>
     </>
   );
