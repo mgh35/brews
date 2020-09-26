@@ -6,8 +6,8 @@ import { StateBuilder } from "testing/state";
 describe("App", () => {
   let appElem: HTMLElement;
   beforeAll(() => {
-    const { container } = render(<UnauthedApp />, new StateBuilder().build());
-    appElem = container;
+    const { rendered } = render(<UnauthedApp />, new StateBuilder().build());
+    appElem = rendered.container;
   });
   it("renders", () => {
     expect(appElem).toBeDefined();

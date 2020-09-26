@@ -10,7 +10,7 @@ describe("BrewList", () => {
   describe("with no brews", () => {
     let rendered: RenderResult;
     beforeEach(() => {
-      rendered = render(<BrewList />, new StateBuilder().build());
+      ({ rendered } = render(<BrewList />, new StateBuilder().build()));
     });
 
     it("has a single table", () => {
@@ -27,7 +27,7 @@ describe("BrewList", () => {
   describe("with 2 brews", () => {
     let rendered: RenderResult;
     beforeEach(() => {
-      rendered = render(
+      ({ rendered } = render(
         <BrewList />,
         new StateBuilder()
           .withBrewListState({
@@ -49,7 +49,7 @@ describe("BrewList", () => {
             ],
           })
           .build()
-      );
+      ));
     });
 
     it("has a single table", () => {

@@ -2,44 +2,57 @@ import User from "models/User";
 import Brew from "models/Brew";
 import { BrewsApi } from "apis";
 
-export class BrewsFromMemory implements BrewsApi {
-  brews: Record<string, Array<Brew>>;
-  error: string | null;
+type AddBrewForUserResolver = (success: boolean) => void;
+type AddBrewForUserRejecter = (err: Error) => void;
 
-  constructor() {
-    this.brews = {};
-    this.error = null;
-  }
+export class MockBrewsApi implements BrewsApi {
+    brews: Record<string, Array<Brew>>;
+    private isCapturingPromises: boolean;
+    private addBrewForUserHandlers: Array<
+        [AddBrewForUserResolver, AddBrewForUserRejecter]
+    >;
 
-  setError(error: string | null): BrewsFromMemory {
-    this.error = error;
-    return this;
-  }
+    constructor() {
+        this.brews = {};
+        this.isCapturingPromises = false;
+        this.addBrewForUserHandlers = [];
+    }
 
-  fetchBrewsForUser(user: User) {
-    return new Promise<Brew[]>((resolve, reject) => {
-      if (this.error) {
-        return reject(this.error);
-      }
+    setCapturePromises(isCapturingPromises: boolean): MockBrewsApi {
+        this.isCapturingPromises = isCapturingPromises;
+        return this;
+    }
 
-      if (!this.brews[user.id]) {
-        return resolve([]);
-      }
-      return resolve([...this.brews[user.id]]);
+    addBrewForUserHandleNext(
+        handler: (
+            resolve: AddBrewForUserResolver,
+            reject: AddBrewForUserRejecter
+        ) => void
+    ) {
+        const [resolve, reject] = this.addBrewForUserHandlers.shift()!;
+        handler(resolve, reject);
+    }
+
+    fetchBrewsForUser = jest.fn((user: User) => {
+        return new Promise<Brew[]>((resolve, reject) => {
+            if (!this.brews[user.id]) {
+                return resolve([]);
+            }
+            return resolve([...this.brews[user.id]]);
+        });
     });
-  }
 
-  addBrewForUser(user: User, brew: Brew) {
-    return new Promise<boolean>((resolve, reject) => {
-      if (this.error) {
-        return reject(this.error);
-      }
-
-      if (!this.brews[user.id]) {
-        this.brews[user.id] = [];
-      }
-      this.brews[user.id].push(brew);
-      return resolve(true);
+    addBrewForUser = jest.fn((user: User, brew: Brew) => {
+        return new Promise<boolean>((resolve, reject) => {
+            if (!this.brews[user.id]) {
+                this.brews[user.id] = [];
+            }
+            this.brews[user.id].push(brew);
+            if (this.isCapturingPromises) {
+                this.addBrewForUserHandlers.push([resolve, reject]);
+                return;
+            }
+            return resolve(true);
+        });
     });
-  }
 }

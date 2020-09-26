@@ -42,9 +42,13 @@ https://www.youtube.com/watch?v=HaEPXoXVf2k
 
 https://reactjs.org/docs/react-component.html
 
+https://reactjs.org/docs/thinking-in-react.html
+
 ## Redux
 
 https://redux.js.org/
+
+https://medium.com/@dan_abramov/you-might-not-need-redux-be46360cf367
 
 https://redux.js.org/advanced/async-actions
 
@@ -74,8 +78,12 @@ https://medium.com/@radzserg/how-to-test-redux-saga-with-dependencies-b3f21aa3c2
 
 https://github.com/freshollie/jest-dynalite
 
+https://blog.caplin.com/2017/01/04/screenplay-pattern-a-solid-alternative-pattern-to-page-objects/
+
 # UI
 
 https://react-bootstrap.github.io/components
 
 https://serverless-stack.com/chapters/handle-routes-with-react-router.html
+
+https://reactjs.org/docs/forms.html

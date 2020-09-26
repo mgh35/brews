@@ -1,15 +1,21 @@
 import React from "react";
 import { Provider } from "react-redux";
 import { render } from "@testing-library/react";
-import configureStore from "redux-mock-store";
+import configureStore, { MockStore } from "redux-mock-store";
 import { RootState } from "store";
 
+export type MockStoreType = MockStore<RootState>;
+
 export default function (elem: React.ReactElement, initialState: RootState) {
-  return render(
-    <>
-      <React.StrictMode>
-        <Provider store={configureStore()(initialState)}>{elem}</Provider>
-      </React.StrictMode>
-    </>
-  );
+  const store = configureStore<RootState>()(initialState);
+  return {
+    store: store,
+    rendered: render(
+      <>
+        <React.StrictMode>
+          <Provider store={store}>{elem}</Provider>
+        </React.StrictMode>
+      </>
+    ),
+  };
 }

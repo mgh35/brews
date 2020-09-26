@@ -184,3 +184,34 @@ search comes up with tons of different options and no clear way to decide. But
 Looking at navigation, hitting yet another stumbling block. Looks like
 `react-router-dom` is the thing. Still waiting for the point when all of this growing
 infra pays off...
+
+# 2020-09-20
+
+As has become the theme, the next change requires yet another rethink. This time, the
+issue is around how to manage the submission of a new Brew. On pressing Add Brew, I want
+to:
+
+- Submit an API call to add a Brew
+- Mark the form as un-editable (but not clear it), with a spinner or something
+- When the API call comes back:
+  - If success, clear out the form
+  - If failure, show an error message but leave the form as is
+
+It feels like the problem is:
+
+- My form is now off Redux (per the various discussion on redux-forms)
+- But my API call is currently mediated through redux(-saga)
+- So on API callback:
+  - The Store doesn't have state needed to process the form change
+  - The Component doesn't have a hook to the callback
+
+which would suggest that the way forward is either:
+
+1. Move the form state back to Redux
+2. Bring the API call into the Component (so the components is completely off Redux)
+
+The main reason for using Redux was for educational purposes. So hard to justify going
+further down that path now that it's really starting to be an impediment. I think at
+this junction, then, I call the Redux experiment over and go with (2). To be decided
+whether better to then refactor Redux out at one go or to remove components as the need
+arises. Will see how this first change goes.
