@@ -4,6 +4,7 @@ import {
     getContext,
     put,
     select,
+    takeEvery,
     takeLatest,
 } from "redux-saga/effects";
 
@@ -11,8 +12,15 @@ import { BREWS_API } from "store/sagas";
 import {
     FetchBrewsRequestedAction,
     FETCH_BREWS_REQUESTED,
+    DeleteBrewRequestedAction,
+    DELETE_BREW_REQUESTED,
 } from "store/brewList/types";
-import { fetchBrewsSucceeded, fetchBrewsFailed } from "./actions";
+import {
+    fetchBrewsSucceeded,
+    fetchBrewsFailed,
+    deleteBrewSucceeded,
+    deleteBrewFailed,
+} from "./actions";
 import { BrewsApi } from "apis";
 
 function* fetchBrews(action: FetchBrewsRequestedAction) {
@@ -29,10 +37,24 @@ function* fetchBrews(action: FetchBrewsRequestedAction) {
     }
 }
 
-export function* fetchBrewsSaga() {
-    yield takeLatest(FETCH_BREWS_REQUESTED, fetchBrews);
+function* deleteBrew(action: DeleteBrewRequestedAction) {
+    try {
+        const user = yield select((state) => state.auth.user);
+        const brewsApi: BrewsApi = yield getContext(BREWS_API);
+        const deletedBrew = yield call(
+            brewsApi.deleteBrewForUser.bind(brewsApi),
+            user,
+            action.brew
+        );
+        yield put(deleteBrewSucceeded(action.brew));
+    } catch (e) {
+        yield put(deleteBrewFailed(e));
+    }
 }
 
 export default function* brewListSagas() {
-    yield all([fetchBrewsSaga()]);
+    yield all([
+        takeLatest(FETCH_BREWS_REQUESTED, fetchBrews),
+        takeEvery(DELETE_BREW_REQUESTED, deleteBrew),
+    ]);
 }

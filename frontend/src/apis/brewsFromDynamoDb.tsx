@@ -8,56 +8,71 @@ import Brew, { BrewBuilder } from "models/Brew";
 import { BrewsApi } from "apis";
 
 export class BrewsFromDynamoDb implements BrewsApi {
-  fetchBrewsForUser(user: User) {
-    return this._db(user.credentials)
-      .query({
-        TableName: "Brews",
-        KeyConditionExpression: "client_id = :client_id",
-        ExpressionAttributeValues: {
-          ":client_id": user.id,
-        },
-      })
-      .promise()
-      .then((response) => {
-        return response.Items ? response.Items.map(this._makeBrewFromItem) : [];
-      });
-  }
-
-  addBrewForUser(user: User, brew: Brew) {
-    return this._db(user.credentials)
-      .put({
-        TableName: "Brews",
-        Item: this._makeItemFromBrew(user, brew),
-      })
-      .promise()
-      .then(() => true);
-  }
-
-  _db(credentials: Credentials): DynamoDB.DocumentClient {
-    const params = config.DYNAMODB_CONFIG;
-    if (!params.accessKeyId && params.region !== "local") {
-      params.credentials = Auth.essentialCredentials(credentials);
+    fetchBrewsForUser(user: User) {
+        return this._db(user.credentials)
+            .query({
+                TableName: "Brews",
+                KeyConditionExpression: "client_id = :client_id",
+                ExpressionAttributeValues: {
+                    ":client_id": user.id,
+                },
+            })
+            .promise()
+            .then((response) => {
+                return response.Items
+                    ? response.Items.map(this._makeBrewFromItem)
+                    : [];
+            });
     }
-    return new DynamoDB.DocumentClient(params);
-  }
 
-  _makeItemFromBrew(user: User, brew: Brew): any {
-    return {
-      client_id: user.id,
-      ...brew,
-    };
-  }
+    addBrewForUser(user: User, brew: Brew) {
+        return this._db(user.credentials)
+            .put({
+                TableName: "Brews",
+                Item: this._makeItemFromBrew(user, brew),
+            })
+            .promise()
+            .then(() => true);
+    }
 
-  _makeBrewFromItem(item: any): Brew {
-    return new BrewBuilder(item.timestamp)
-      .withBean(item.bean)
-      .withBeanWeightInGrams(item.beanWeightInGrams)
-      .withGrinder(item.grinder)
-      .withGrindSetting(item.grindSetting)
-      .withBloomTimeInSeconds(item.bloomTimeInSeconds)
-      .withBrewTimeInSeconds(item.brewTimeInSeconds)
-      .withWaterWeightInGrams(item.waterWeightInGrams)
-      .withComment(item.comment)
-      .build();
-  }
+    deleteBrewForUser(user: User, brew: Brew) {
+        return this._db(user.credentials)
+            .delete({
+                TableName: "Brews",
+                Key: {
+                    client_id: user.id,
+                    timestamp: brew.timestamp,
+                },
+            })
+            .promise()
+            .then(() => brew);
+    }
+
+    _db(credentials: Credentials): DynamoDB.DocumentClient {
+        const params = config.DYNAMODB_CONFIG;
+        if (!params.accessKeyId && params.region !== "local") {
+            params.credentials = Auth.essentialCredentials(credentials);
+        }
+        return new DynamoDB.DocumentClient(params);
+    }
+
+    _makeItemFromBrew(user: User, brew: Brew): any {
+        return {
+            client_id: user.id,
+            ...brew,
+        };
+    }
+
+    _makeBrewFromItem(item: any): Brew {
+        return new BrewBuilder(item.timestamp)
+            .withBean(item.bean)
+            .withBeanWeightInGrams(item.beanWeightInGrams)
+            .withGrinder(item.grinder)
+            .withGrindSetting(item.grindSetting)
+            .withBloomTimeInSeconds(item.bloomTimeInSeconds)
+            .withBrewTimeInSeconds(item.brewTimeInSeconds)
+            .withWaterWeightInGrams(item.waterWeightInGrams)
+            .withComment(item.comment)
+            .build();
+    }
 }

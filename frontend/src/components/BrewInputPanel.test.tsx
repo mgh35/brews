@@ -118,7 +118,7 @@ describe("BrewInputPanel", () => {
         ["Bloom Time (s)", "45s"],
         ["Brew Time (s)", "-200"],
         ["Water Weight (g)", "many"],
-    ]).describe.only("with invalid values in %s", (fieldName, invalidValue) => {
+    ]).describe("with invalid values in %s", (fieldName, invalidValue) => {
         let brewsApi: MockBrewsApi;
         let field: HTMLElement;
         beforeEach(async () => {

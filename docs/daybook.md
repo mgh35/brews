@@ -215,3 +215,25 @@ further down that path now that it's really starting to be an impediment. I thin
 this junction, then, I call the Redux experiment over and go with (2). To be decided
 whether better to then refactor Redux out at one go or to remove components as the need
 arises. Will see how this first change goes.
+
+# 2020-09-27
+
+The testing strategy needs a rethink. I'm spending significant time trying to figure out
+how to write tests for features with very little value in the tests. (Though, again,
+there has been plenty of pedagogic value in figuring out what testing is possible.) Key
+examples:
+
+- BrewList: As a connective component, it's intended to be a stateless, declarative
+  component. I am not convinced that a test of the resulting HTML is going to prove of
+  much value.
+- brewList/reducers: Without anything complex in the reducer, testing it is just an
+  exercise in repeating the same requirement a second time.
+
+My suspicion is that:
+
+- It's valuable to have the unit tests up and running.
+  - If there is ever some complex logic that could benefit from testing there will
+    already be the required structure to introduce it.
+  - I'm not sure how to keep that without writing useless tests. Maybe it's actually
+    best to just wait until a test is actually wanted.
+- It would be valuable to have some integration tests to record use-cases.
