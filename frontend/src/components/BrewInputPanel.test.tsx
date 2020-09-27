@@ -1,6 +1,6 @@
 import React from "react";
 import user from "@testing-library/user-event";
-import { screen } from "@testing-library/dom";
+import { screen, waitFor } from "@testing-library/dom";
 import { act } from "@testing-library/react";
 import each from "jest-each";
 
@@ -50,14 +50,19 @@ describe("BrewInputPanel", () => {
 
     describe("on pressing Add", () => {
         let brewsApi: MockBrewsApi;
+        let addBrewButton: HTMLElement;
         beforeEach(async () => {
             brewsApi = new MockBrewsApi().setCapturePromises(true);
             render(<BrewInputPanel user={testUser} brewsApi={brewsApi} />);
+            addBrewButton = screen.getByText("Add Brew");
             await act(async () => {
                 for (const { name, sampleValue } of expectedFields) {
                     user.type(screen.getByLabelText(name), sampleValue);
                 }
-                user.click(screen.getByText("Add Brew"));
+                user.click(addBrewButton);
+                await waitFor(() => {
+                    expect(addBrewButton).toBeDisabled();
+                });
             });
         });
 
@@ -65,12 +70,17 @@ describe("BrewInputPanel", () => {
             expect(brewsApi.addBrewForUser.mock.calls.length).toEqual(1);
         });
 
-        each(expectedFields.map((field) => [field.name, field.sampleValue])).it(
-            "retains the input value on field %s",
-            (name, sampleValue) => {
+        each(
+            expectedFields.map((field) => [field.name, field.sampleValue])
+        ).describe("field %s", (name, sampleValue) => {
+            it("retains the input value", () => {
                 expect(screen.getByLabelText(name).value).toEqual(sampleValue);
-            }
-        );
+            });
+
+            it("is disabled", async () => {
+                expect(screen.getByLabelText(name)).toBeDisabled();
+            });
+        });
 
         describe("successful return", () => {
             beforeEach(async () => {
@@ -78,13 +88,22 @@ describe("BrewInputPanel", () => {
                     brewsApi.addBrewForUserHandleNext((resolve) => {
                         resolve(true);
                     });
+                    await waitFor(() => {
+                        expect(addBrewButton).not.toBeDisabled();
+                    });
                 });
             });
 
-            each(expectedFields.map((field) => [field.name])).it(
-                "clears the input value on field %s",
+            each(expectedFields.map((field) => [field.name])).describe(
+                "field %s",
                 (name) => {
-                    expect(screen.getByLabelText(name).value).toEqual("");
+                    it("is enabled", () => {
+                        expect(screen.getByLabelText(name)).not.toBeDisabled();
+                    });
+
+                    it("is cleared out", () => {
+                        expect(screen.getByLabelText(name).value).toEqual("");
+                    });
                 }
             );
         });
@@ -95,13 +114,24 @@ describe("BrewInputPanel", () => {
                     brewsApi.addBrewForUserHandleNext((_, reject) => {
                         reject(Error("Some bad error!"));
                     });
+                    await waitFor(() => {
+                        expect(addBrewButton).not.toBeDisabled();
+                    });
                 });
             });
 
             each(
                 expectedFields.map((field) => [field.name, field.sampleValue])
-            ).it("retains the input value on field %s", (name, sampleValue) => {
-                expect(screen.getByLabelText(name).value).toEqual(sampleValue);
+            ).describe("field %s", (name, sampleValue) => {
+                it("is enabled", () => {
+                    expect(screen.getByLabelText(name)).not.toBeDisabled();
+                });
+
+                it("retains the input value", () => {
+                    expect(screen.getByLabelText(name).value).toEqual(
+                        sampleValue
+                    );
+                });
             });
 
             it("displays the error message", () => {

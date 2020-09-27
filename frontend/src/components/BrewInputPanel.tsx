@@ -35,6 +35,7 @@ export const BrewInputPanel: FunctionComponent<Props> = ({
     brewsApi,
 }) => {
     const [errorMessage, setErrorMessage] = useState(null);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     return (
         <>
@@ -42,6 +43,9 @@ export const BrewInputPanel: FunctionComponent<Props> = ({
                 initialValues={initialValues}
                 onSubmit={async (values, { resetForm, ...rest }) => {
                     try {
+                        setIsSubmitting(true);
+                        // await new Promise((r) => setTimeout(r, 1000));
+                        // throw new Error("Some bad thing");
                         await brewsApi.addBrewForUser(
                             user!,
                             makeBrewFromFormValues(values)
@@ -51,6 +55,8 @@ export const BrewInputPanel: FunctionComponent<Props> = ({
                         const message =
                             err instanceof Error ? err.message : err;
                         setErrorMessage(message);
+                    } finally {
+                        setIsSubmitting(false);
                     }
                 }}
                 validationSchema={yup.object().shape({
@@ -70,117 +76,123 @@ export const BrewInputPanel: FunctionComponent<Props> = ({
                             formik.handleSubmit();
                         }}
                     >
-                        <FormGroup controlId="bean">
-                            <FormLabel>Bean</FormLabel>
-                            <Field as={FormControl} type="text" name="bean" />
-                        </FormGroup>
-                        <FormGroup controlId="beanWeightInGrams">
-                            <FormLabel>Bean Weight (g)</FormLabel>
-                            <Field
-                                as={FormControl}
-                                type="text"
-                                name="beanWeightInGrams"
-                                className={
-                                    formik.errors.beanWeightInGrams
-                                        ? "is-invalid"
-                                        : ""
-                                }
-                            />
-                            {formik.errors.beanWeightInGrams && (
-                                <div className="invalid-feedback">
-                                    {formik.errors.beanWeightInGrams}
-                                </div>
-                            )}
-                        </FormGroup>
-                        <FormGroup controlId="grinder">
-                            <FormLabel>Grinder</FormLabel>
-                            <Field
-                                as={FormControl}
-                                type="text"
-                                name="grinder"
-                            />
-                        </FormGroup>
-                        <FormGroup controlId="grindSetting">
-                            <FormLabel>Grind Setting</FormLabel>
-                            <Field
-                                as={FormControl}
-                                type="text"
-                                name="grindSetting"
-                                className={
-                                    formik.errors.grindSetting
-                                        ? "is-invalid"
-                                        : ""
-                                }
-                            />
-                            {formik.errors.grindSetting && (
-                                <div className="invalid-feedback">
-                                    {formik.errors.grindSetting}
-                                </div>
-                            )}
-                        </FormGroup>
-                        <FormGroup controlId="bloomTimeInSeconds">
-                            <FormLabel>Bloom Time (s)</FormLabel>
-                            <Field
-                                as={FormControl}
-                                type="text"
-                                name="bloomTimeInSeconds"
-                                className={
-                                    formik.errors.bloomTimeInSeconds
-                                        ? "is-invalid"
-                                        : ""
-                                }
-                            />
-                            {formik.errors.bloomTimeInSeconds && (
-                                <div className="invalid-feedback">
-                                    {formik.errors.bloomTimeInSeconds}
-                                </div>
-                            )}
-                        </FormGroup>
-                        <FormGroup controlId="brewTimeInSeconds">
-                            <FormLabel>Brew Time (s)</FormLabel>
-                            <Field
-                                as={FormControl}
-                                type="text"
-                                name="brewTimeInSeconds"
-                                className={
-                                    formik.errors.brewTimeInSeconds
-                                        ? "is-invalid"
-                                        : ""
-                                }
-                            />
-                            {formik.errors.brewTimeInSeconds && (
-                                <div className="invalid-feedback">
-                                    {formik.errors.brewTimeInSeconds}
-                                </div>
-                            )}
-                        </FormGroup>
-                        <FormGroup controlId="waterWeightInGrams">
-                            <FormLabel>Water Weight (g)</FormLabel>
-                            <Field
-                                as={FormControl}
-                                type="text"
-                                name="waterWeightInGrams"
-                                className={
-                                    formik.errors.waterWeightInGrams
-                                        ? "is-invalid"
-                                        : ""
-                                }
-                            />
-                            {formik.errors.waterWeightInGrams && (
-                                <div className="invalid-feedback">
-                                    {formik.errors.waterWeightInGrams}
-                                </div>
-                            )}
-                        </FormGroup>
-                        <FormGroup controlId="comment">
-                            <FormLabel>Comment</FormLabel>
-                            <Field
-                                as={FormControl}
-                                type="text"
-                                name="comment"
-                            />
-                        </FormGroup>
-                        <Button type="submit">Add Brew</Button>
+                        <fieldset disabled={isSubmitting}>
+                            <FormGroup controlId="bean">
+                                <FormLabel>Bean</FormLabel>
+                                <Field
+                                    as={FormControl}
+                                    type="text"
+                                    name="bean"
+                                />
+                            </FormGroup>
+                            <FormGroup controlId="beanWeightInGrams">
+                                <FormLabel>Bean Weight (g)</FormLabel>
+                                <Field
+                                    as={FormControl}
+                                    type="text"
+                                    name="beanWeightInGrams"
+                                    className={
+                                        formik.errors.beanWeightInGrams
+                                            ? "is-invalid"
+                                            : ""
+                                    }
+                                />
+                                {formik.errors.beanWeightInGrams && (
+                                    <div className="invalid-feedback">
+                                        {formik.errors.beanWeightInGrams}
+                                    </div>
+                                )}
+                            </FormGroup>
+                            <FormGroup controlId="grinder">
+                                <FormLabel>Grinder</FormLabel>
+                                <Field
+                                    as={FormControl}
+                                    type="text"
+                                    name="grinder"
+                                />
+                            </FormGroup>
+                            <FormGroup controlId="grindSetting">
+                                <FormLabel>Grind Setting</FormLabel>
+                                <Field
+                                    as={FormControl}
+                                    type="text"
+                                    name="grindSetting"
+                                    className={
+                                        formik.errors.grindSetting
+                                            ? "is-invalid"
+                                            : ""
+                                    }
+                                />
+                                {formik.errors.grindSetting && (
+                                    <div className="invalid-feedback">
+                                        {formik.errors.grindSetting}
+                                    </div>
+                                )}
+                            </FormGroup>
+                            <FormGroup controlId="bloomTimeInSeconds">
+                                <FormLabel>Bloom Time (s)</FormLabel>
+                                <Field
+                                    as={FormControl}
+                                    type="text"
+                                    name="bloomTimeInSeconds"
+                                    className={
+                                        formik.errors.bloomTimeInSeconds
+                                            ? "is-invalid"
+                                            : ""
+                                    }
+                                />
+                                {formik.errors.bloomTimeInSeconds && (
+                                    <div className="invalid-feedback">
+                                        {formik.errors.bloomTimeInSeconds}
+                                    </div>
+                                )}
+                            </FormGroup>
+                            <FormGroup controlId="brewTimeInSeconds">
+                                <FormLabel>Brew Time (s)</FormLabel>
+                                <Field
+                                    as={FormControl}
+                                    type="text"
+                                    name="brewTimeInSeconds"
+                                    className={
+                                        formik.errors.brewTimeInSeconds
+                                            ? "is-invalid"
+                                            : ""
+                                    }
+                                />
+                                {formik.errors.brewTimeInSeconds && (
+                                    <div className="invalid-feedback">
+                                        {formik.errors.brewTimeInSeconds}
+                                    </div>
+                                )}
+                            </FormGroup>
+                            <FormGroup controlId="waterWeightInGrams">
+                                <FormLabel>Water Weight (g)</FormLabel>
+                                <Field
+                                    as={FormControl}
+                                    type="text"
+                                    name="waterWeightInGrams"
+                                    className={
+                                        formik.errors.waterWeightInGrams
+                                            ? "is-invalid"
+                                            : ""
+                                    }
+                                />
+                                {formik.errors.waterWeightInGrams && (
+                                    <div className="invalid-feedback">
+                                        {formik.errors.waterWeightInGrams}
+                                    </div>
+                                )}
+                            </FormGroup>
+                            <FormGroup controlId="comment">
+                                <FormLabel>Comment</FormLabel>
+                                <Field
+                                    as={FormControl}
+                                    type="text"
+                                    name="comment"
+                                />
+                            </FormGroup>
+                            <Button type="submit">Add Brew</Button>
+                        </fieldset>
                         {errorMessage && (
                             <div
                                 className="alert alert-warning alert-dismissible fade show"
