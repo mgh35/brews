@@ -1,6 +1,6 @@
 import React from "react";
 import user from "@testing-library/user-event";
-import { waitFor, screen } from "@testing-library/dom";
+import { screen } from "@testing-library/dom";
 import { act } from "@testing-library/react";
 import each from "jest-each";
 
@@ -108,6 +108,53 @@ describe("BrewInputPanel", () => {
                 expect(
                     screen.queryByText("Some bad error!")
                 ).toBeInTheDocument();
+            });
+        });
+    });
+
+    each([
+        ["Bean Weight (g)", "12g"],
+        ["Grind Setting", "10.4"],
+        ["Bloom Time (s)", "45s"],
+        ["Brew Time (s)", "-200"],
+        ["Water Weight (g)", "many"],
+    ]).describe.only("with invalid values in %s", (fieldName, invalidValue) => {
+        let brewsApi: MockBrewsApi;
+        let field: HTMLElement;
+        beforeEach(async () => {
+            brewsApi = new MockBrewsApi();
+            render(<BrewInputPanel user={testUser} brewsApi={brewsApi} />);
+            field = screen.getByLabelText(fieldName);
+            await act(async () => {
+                user.type(field, invalidValue);
+            });
+            await act(async () => {
+                user.type(
+                    screen.getByLabelText("Comment"),
+                    "Clicking somewhere else"
+                );
+            });
+        });
+
+        it("to be flagged invalid", () => {
+            expect(field).toHaveClass("is-invalid");
+        });
+
+        it("shows an error message", () => {
+            expect(
+                field.parentElement!.querySelector(".invalid-feedback")
+            ).toBeInTheDocument();
+        });
+
+        describe("on pressing add", () => {
+            beforeEach(async () => {
+                await act(async () => {
+                    user.click(screen.getByText("Add Brew"));
+                });
+            });
+
+            it("does not call the add brew API", () => {
+                expect(brewsApi.hasBeenCalled()).toBeFalsy();
             });
         });
     });

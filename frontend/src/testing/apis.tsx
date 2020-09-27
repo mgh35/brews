@@ -33,6 +33,13 @@ export class MockBrewsApi implements BrewsApi {
         handler(resolve, reject);
     }
 
+    hasBeenCalled(): boolean {
+        return (
+            this.addBrewForUser.mock.calls.length > 0 ||
+            this.fetchBrewsForUser.mock.calls.length > 0
+        );
+    }
+
     fetchBrewsForUser = jest.fn((user: User) => {
         return new Promise<Brew[]>((resolve, reject) => {
             if (!this.brews[user.id]) {

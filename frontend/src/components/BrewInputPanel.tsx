@@ -6,6 +6,7 @@ import Form from "react-bootstrap/Form";
 import FormGroup from "react-bootstrap/FormGroup";
 import FormLabel from "react-bootstrap/FormLabel";
 import FormControl from "react-bootstrap/FormControl";
+import * as yup from "yup";
 
 import Brew, { BrewBuilder } from "models/Brew";
 import { RootState } from "store";
@@ -39,9 +40,9 @@ export const BrewInputPanel: FunctionComponent<Props> = ({
         <>
             <Formik
                 initialValues={initialValues}
-                onSubmit={async (values, { resetForm }) => {
+                onSubmit={async (values, { resetForm, ...rest }) => {
                     try {
-                        const success = await brewsApi.addBrewForUser(
+                        await brewsApi.addBrewForUser(
                             user!,
                             makeBrewFromFormValues(values)
                         );
@@ -52,6 +53,13 @@ export const BrewInputPanel: FunctionComponent<Props> = ({
                         setErrorMessage(message);
                     }
                 }}
+                validationSchema={yup.object().shape({
+                    beanWeightInGrams: yup.number().min(0),
+                    grindSetting: yup.number().min(0).integer(),
+                    bloomTimeInSeconds: yup.number().min(0),
+                    brewTimeInSeconds: yup.number().min(0),
+                    waterWeightInGrams: yup.number().min(0),
+                })}
             >
                 {(formik) => (
                     <Form
@@ -72,7 +80,17 @@ export const BrewInputPanel: FunctionComponent<Props> = ({
                                 as={FormControl}
                                 type="text"
                                 name="beanWeightInGrams"
+                                className={
+                                    formik.errors.beanWeightInGrams
+                                        ? "is-invalid"
+                                        : ""
+                                }
                             />
+                            {formik.errors.beanWeightInGrams && (
+                                <div className="invalid-feedback">
+                                    {formik.errors.beanWeightInGrams}
+                                </div>
+                            )}
                         </FormGroup>
                         <FormGroup controlId="grinder">
                             <FormLabel>Grinder</FormLabel>
@@ -88,7 +106,17 @@ export const BrewInputPanel: FunctionComponent<Props> = ({
                                 as={FormControl}
                                 type="text"
                                 name="grindSetting"
+                                className={
+                                    formik.errors.grindSetting
+                                        ? "is-invalid"
+                                        : ""
+                                }
                             />
+                            {formik.errors.grindSetting && (
+                                <div className="invalid-feedback">
+                                    {formik.errors.grindSetting}
+                                </div>
+                            )}
                         </FormGroup>
                         <FormGroup controlId="bloomTimeInSeconds">
                             <FormLabel>Bloom Time (s)</FormLabel>
@@ -96,7 +124,17 @@ export const BrewInputPanel: FunctionComponent<Props> = ({
                                 as={FormControl}
                                 type="text"
                                 name="bloomTimeInSeconds"
+                                className={
+                                    formik.errors.bloomTimeInSeconds
+                                        ? "is-invalid"
+                                        : ""
+                                }
                             />
+                            {formik.errors.bloomTimeInSeconds && (
+                                <div className="invalid-feedback">
+                                    {formik.errors.bloomTimeInSeconds}
+                                </div>
+                            )}
                         </FormGroup>
                         <FormGroup controlId="brewTimeInSeconds">
                             <FormLabel>Brew Time (s)</FormLabel>
@@ -104,7 +142,17 @@ export const BrewInputPanel: FunctionComponent<Props> = ({
                                 as={FormControl}
                                 type="text"
                                 name="brewTimeInSeconds"
+                                className={
+                                    formik.errors.brewTimeInSeconds
+                                        ? "is-invalid"
+                                        : ""
+                                }
                             />
+                            {formik.errors.brewTimeInSeconds && (
+                                <div className="invalid-feedback">
+                                    {formik.errors.brewTimeInSeconds}
+                                </div>
+                            )}
                         </FormGroup>
                         <FormGroup controlId="waterWeightInGrams">
                             <FormLabel>Water Weight (g)</FormLabel>
@@ -112,7 +160,17 @@ export const BrewInputPanel: FunctionComponent<Props> = ({
                                 as={FormControl}
                                 type="text"
                                 name="waterWeightInGrams"
+                                className={
+                                    formik.errors.waterWeightInGrams
+                                        ? "is-invalid"
+                                        : ""
+                                }
                             />
+                            {formik.errors.waterWeightInGrams && (
+                                <div className="invalid-feedback">
+                                    {formik.errors.waterWeightInGrams}
+                                </div>
+                            )}
                         </FormGroup>
                         <FormGroup controlId="comment">
                             <FormLabel>Comment</FormLabel>
