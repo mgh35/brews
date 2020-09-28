@@ -37,16 +37,13 @@ describe("DELETE_BREWS_REQUEST", () => {
 
 describe("DELETE_BREW_SUCCEEDED", () => {
     let state: BrewListState;
-    const brewToDelete = new BrewBuilder("2020-01-01 00:01:00").build();
+    const brewToDelete = new BrewBuilder("2").build();
     beforeAll(() => {
         state = reducer(
             new StateBuilder()
                 .withBrewListState((state) => ({
                     ...state,
-                    all: [
-                        new BrewBuilder("2020-01-01 00:00:00").build(),
-                        brewToDelete,
-                    ],
+                    all: [new BrewBuilder("1").build(), brewToDelete],
                 }))
                 .buildBrewListState(),
             {
@@ -66,7 +63,7 @@ describe("DELETE_BREW_SUCCEEDED", () => {
 
     it("removes the Brew from `all`", () => {
         expect(state.all.length).toEqual(1);
-        expect(state.all[0].timestamp).not.toEqual(brewToDelete.timestamp);
+        expect(state.all[0].id).not.toEqual(brewToDelete.id);
     });
 });
 

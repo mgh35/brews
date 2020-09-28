@@ -49,7 +49,7 @@ const BrewList: FunctionComponent<Props> = ({
             </thead>
             <tbody>
                 {brews.map((brew: Brew) => (
-                    <tr key={brew.timestamp}>
+                    <tr key={brew.id}>
                         <td>{brew.timestamp}</td>
                         <td>{brew.bean}</td>
                         <td>{brew.beanWeightInGrams}</td>

@@ -60,9 +60,7 @@ export default function (
                 ...state,
                 isDeleting: false,
                 errorDeleting: null,
-                all: state.all.filter(
-                    (brew) => brew.timestamp !== action.brew.timestamp
-                ),
+                all: state.all.filter((brew) => brew.id !== action.brew.id),
             };
         case DELETE_BREW_FAILED:
             return {

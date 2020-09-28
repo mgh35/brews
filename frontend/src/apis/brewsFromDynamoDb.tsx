@@ -12,9 +12,9 @@ export class BrewsFromDynamoDb implements BrewsApi {
         return this._db(user.credentials)
             .query({
                 TableName: "Brews",
-                KeyConditionExpression: "client_id = :client_id",
+                KeyConditionExpression: "pk = :pk",
                 ExpressionAttributeValues: {
-                    ":client_id": user.id,
+                    ":pk": user.id,
                 },
             })
             .promise()
@@ -40,8 +40,8 @@ export class BrewsFromDynamoDb implements BrewsApi {
             .delete({
                 TableName: "Brews",
                 Key: {
-                    client_id: user.id,
-                    timestamp: brew.timestamp,
+                    pk: user.id,
+                    sk: this._makeBrewKey(brew),
                 },
             })
             .promise()
@@ -58,13 +58,19 @@ export class BrewsFromDynamoDb implements BrewsApi {
 
     _makeItemFromBrew(user: User, brew: Brew): any {
         return {
-            client_id: user.id,
+            pk: user.id,
+            sk: this._makeBrewKey(brew),
             ...brew,
         };
     }
 
+    _makeBrewKey(brew: Brew): string {
+        return `Brew#${brew.id}`;
+    }
+
     _makeBrewFromItem(item: any): Brew {
-        return new BrewBuilder(item.timestamp)
+        return new BrewBuilder(item.id)
+            .withTimestamp(item.timestamp)
             .withBean(item.bean)
             .withBeanWeightInGrams(item.beanWeightInGrams)
             .withGrinder(item.grinder)

@@ -96,7 +96,7 @@ export class MockBrewsApi implements BrewsApi {
                 return reject(`User ${user.id} has no Brews`);
             }
             for (let i = 0; i < userBrews.length; ++i) {
-                if (userBrews[i].timestamp === brew.timestamp) {
+                if (userBrews[i].id === brew.id) {
                     this.brews[user.id] = [
                         ...userBrews.slice(0, i),
                         ...userBrews.slice(i + 1),
@@ -104,7 +104,7 @@ export class MockBrewsApi implements BrewsApi {
                     return resolve(brew);
                 }
             }
-            return reject(`User ${user.id} has no Brew ${brew.timestamp}`);
+            return reject(`User ${user.id} has no Brew ${brew.id}`);
         });
     });
 }

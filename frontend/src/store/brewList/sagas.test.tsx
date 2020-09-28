@@ -18,12 +18,8 @@ describe("deleteBrewSaga", () => {
 
         beforeAll(async () => {
             brews = [
-                new BrewBuilder("2020-01-01 00:00:00Z")
-                    .withComment("Brew 1")
-                    .build(),
-                new BrewBuilder("2020-01-01 00:00:01Z")
-                    .withComment("Brew 2")
-                    .build(),
+                new BrewBuilder("1").withComment("Brew 1").build(),
+                new BrewBuilder("2").withComment("Brew 2").build(),
             ];
             user = createTestUser();
             brewToDelete = brews[1];
@@ -62,8 +58,8 @@ describe("deleteBrewSaga", () => {
         it("deletes the brew", () => {
             expect(brewsApi.brews[user.id].length).toEqual(brews.length - 1);
             expect(
-                brewsApi.brews[user.id].map((brew) => brew.timestamp)
-            ).not.toContain(brewToDelete.timestamp);
+                brewsApi.brews[user.id].map((brew) => brew.id)
+            ).not.toContain(brewToDelete.id);
         });
     });
 

@@ -27,11 +27,11 @@ elif [ "$ENV" = "development" ]; then
         --profile $ENV \
         --table-name Brews \
         --attribute-definitions \
-            AttributeName=client_id,AttributeType=S \
-            AttributeName=timestamp,AttributeType=S \
+            AttributeName=pk,AttributeType=S \
+            AttributeName=sk,AttributeType=S \
         --key-schema \
-            AttributeName=client_id,KeyType=HASH \
-            AttributeName=timestamp,KeyType=RANGE \
+            AttributeName=pk,KeyType=HASH \
+            AttributeName=sk,KeyType=RANGE \
         --billing-mode PAY_PER_REQUEST \
         --endpoint-url http://localhost:8000
     )

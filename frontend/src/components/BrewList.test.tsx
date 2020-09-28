@@ -39,12 +39,8 @@ describe("BrewList", () => {
                     .withBrewListState((state) => ({
                         ...state,
                         all: [
-                            new BrewBuilder("2020-09-06T09:00:00+0000")
-                                .withComment("brew 1")
-                                .build(),
-                            new BrewBuilder("2020-09-06T09:05:00+0000")
-                                .withComment("brew 2")
-                                .build(),
+                            new BrewBuilder("1").build(),
+                            new BrewBuilder("2").build(),
                         ],
                     }))
                     .build()
@@ -83,7 +79,7 @@ describe("BrewList", () => {
                 expect(store.getActions().length).toEqual(1);
                 const action: DeleteBrewRequestedAction = store.getActions()[0];
                 expect(action.type).toEqual(DELETE_BREW_REQUESTED);
-                expect(action.brew.comment).toEqual("brew 2");
+                expect(action.brew.id).toEqual("2");
             });
         });
     });

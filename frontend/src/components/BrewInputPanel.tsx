@@ -212,6 +212,7 @@ export const BrewInputPanel: FunctionComponent<Props> = ({
 const makeBrewFromFormValues = (values: typeof initialValues): Brew => {
     const value = (name: keyof typeof values) => values[name] || null;
     return new BrewBuilder()
+        .withCurrentTimestamp()
         .withBean(value("bean"))
         .withBeanWeightInGrams(value("beanWeightInGrams"))
         .withComment(value("comment"))
