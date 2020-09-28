@@ -2,8 +2,8 @@ resource aws_dynamodb_table "brews" {
   name         = "Brews"
   billing_mode = "PAY_PER_REQUEST"
 
-  hash_key  = "client_id"
-  range_key = "timestamp"
+  hash_key  = "pk"
+  range_key = "sk"
 
   attribute {
     name = "pk"

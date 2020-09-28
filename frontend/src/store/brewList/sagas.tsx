@@ -41,7 +41,7 @@ function* deleteBrew(action: DeleteBrewRequestedAction) {
     try {
         const user = yield select((state) => state.auth.user);
         const brewsApi: BrewsApi = yield getContext(BREWS_API);
-        const deletedBrew = yield call(
+        yield call(
             brewsApi.deleteBrewForUser.bind(brewsApi),
             user,
             action.brew
