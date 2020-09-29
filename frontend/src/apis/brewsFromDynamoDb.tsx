@@ -3,57 +3,66 @@ import DynamoDB from "aws-sdk/clients/dynamodb";
 
 import config from "config";
 
-import User, { Credentials } from "models/User";
+import User from "models/User";
 import Brew, { BrewBuilder } from "models/Brew";
 import { BrewsApi } from "apis";
 
 export class BrewsFromDynamoDb implements BrewsApi {
     fetchBrewsForUser(user: User) {
-        return this._db(user.credentials)
-            .query({
-                TableName: "Brews",
-                KeyConditionExpression: "pk = :pk",
-                ExpressionAttributeValues: {
-                    ":pk": user.id,
-                },
-            })
-            .promise()
-            .then((response) => {
-                return response.Items
-                    ? response.Items.map(this._makeBrewFromItem)
-                    : [];
-            });
+        return this._authed_db().then((db) =>
+            db
+                .query({
+                    TableName: "Brews",
+                    KeyConditionExpression: "pk = :pk",
+                    ExpressionAttributeValues: {
+                        ":pk": user.id,
+                    },
+                })
+                .promise()
+                .then((response) => {
+                    return response.Items
+                        ? response.Items.map(this._makeBrewFromItem)
+                        : [];
+                })
+        );
     }
 
     addBrewForUser(user: User, brew: Brew) {
-        return this._db(user.credentials)
-            .put({
-                TableName: "Brews",
-                Item: this._makeItemFromBrew(user, brew),
-            })
-            .promise()
-            .then(() => true);
+        return this._authed_db().then((db) =>
+            db
+                .put({
+                    TableName: "Brews",
+                    Item: this._makeItemFromBrew(user, brew),
+                })
+                .promise()
+                .then(() => true)
+        );
     }
 
     deleteBrewForUser(user: User, brew: Brew) {
-        return this._db(user.credentials)
-            .delete({
-                TableName: "Brews",
-                Key: {
-                    pk: user.id,
-                    sk: this._makeBrewKey(brew),
-                },
-            })
-            .promise()
-            .then(() => brew);
+        return this._authed_db().then((db) =>
+            db
+                .delete({
+                    TableName: "Brews",
+                    Key: {
+                        pk: user.id,
+                        sk: this._makeBrewKey(brew),
+                    },
+                })
+                .promise()
+                .then(() => brew)
+        );
     }
 
-    _db(credentials: Credentials): DynamoDB.DocumentClient {
+    _authed_db(): Promise<DynamoDB.DocumentClient> {
         const params = config.DYNAMODB_CONFIG;
-        if (!params.accessKeyId && params.region !== "local") {
-            params.credentials = Auth.essentialCredentials(credentials);
+        if (params.is_local) {
+            console.log("local");
+            return Promise.resolve(new DynamoDB.DocumentClient(params));
         }
-        return new DynamoDB.DocumentClient(params);
+        return Auth.currentUserCredentials().then(
+            (credentials) => new DynamoDB.DocumentClient(credentials)
+        );
     }
 
     _makeItemFromBrew(user: User, brew: Brew): any {

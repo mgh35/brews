@@ -36,6 +36,7 @@ if [ "$ENV" == "production" ]; then
 else
     DYNAMODB_CONFIG=$(cat <<EOF
 {
+    "is_local": true,
     "endpoint": "http://localhost:8000",
     "accessKeyId": "$(aws configure get aws_access_key_id --profile $ENV)",
     "secretAccessKey": "$(aws configure get aws_secret_access_key --profile $ENV)"
