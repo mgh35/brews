@@ -44,14 +44,11 @@ export type BrewListAction =
     | DeleteBrewSucceededAction
     | DeleteBrewFailedAction;
 
-interface FetchBrewsState {
-    isRunning: boolean;
-    error: string | null;
-}
-
-export interface BrewListState {
-    fetchBrews: FetchBrewsState;
+export interface BrewsState {
+    idToBrew: { [Key: string]: Brew };
+    isFetching: boolean;
+    errorFetching: string | null;
     isDeleting: boolean;
     errorDeleting: string | null;
-    all: Brew[];
+    list_by_most_recent: Array<string>;
 }

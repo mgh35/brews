@@ -14,7 +14,7 @@ import {
     FETCH_BREWS_REQUESTED,
     DeleteBrewRequestedAction,
     DELETE_BREW_REQUESTED,
-} from "store/brewList/types";
+} from "store/brews/types";
 import {
     fetchBrewsSucceeded,
     fetchBrewsFailed,

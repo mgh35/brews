@@ -10,30 +10,34 @@ import { createTestUser } from "testing/models";
 
 describe("deleteBrewSaga", () => {
     describe("green path", () => {
-        let brews: Brew[];
+        let brews: { [Key: string]: Brew };
         let user: User;
         let brewToDelete: Brew;
         let brewsApi: MockBrewsApi;
         let tester: RootSagaTester;
 
         beforeAll(async () => {
-            brews = [
-                new BrewBuilder("1").withComment("Brew 1").build(),
-                new BrewBuilder("2").withComment("Brew 2").build(),
-            ];
+            brews = {
+                "1": new BrewBuilder("1").withComment("Brew 1").build(),
+                "2": new BrewBuilder("2").withComment("Brew 2").build(),
+            };
             user = createTestUser();
-            brewToDelete = brews[1];
+            brewToDelete = brews["2"];
 
-            brewsApi = new MockBrewsApi().setUserBrews(user, brews);
+            brewsApi = new MockBrewsApi().setUserBrews(
+                user,
+                Object.values(brews)
+            );
             tester = getSagaTester(
                 new StateBuilder()
                     .withUser(user)
-                    .withBrewListState({
-                        all: [...brews],
-                        fetchBrews: { isRunning: false, error: null },
-                        isDeleting: false,
-                        errorDeleting: null,
-                    })
+                    .withBrewListState((state) => ({
+                        ...state,
+                        idToBrew: brews,
+                        list_by_most_recent: Object.values(brews).map(
+                            (brew) => brew.id
+                        ),
+                    }))
                     .build(),
                 brewsApi
             );
@@ -56,7 +60,9 @@ describe("deleteBrewSaga", () => {
         });
 
         it("deletes the brew", () => {
-            expect(brewsApi.brews[user.id].length).toEqual(brews.length - 1);
+            expect(brewsApi.brews[user.id].length).toEqual(
+                Object.keys(brews).length - 1
+            );
             expect(
                 brewsApi.brews[user.id].map((brew) => brew.id)
             ).not.toContain(brewToDelete.id);

@@ -9,7 +9,7 @@ import { StateBuilder } from "testing/state";
 import {
     DELETE_BREW_REQUESTED,
     DeleteBrewRequestedAction,
-} from "store/brewList/types";
+} from "store/brews/types";
 
 describe("BrewList", () => {
     describe("with no brews", () => {
@@ -38,10 +38,11 @@ describe("BrewList", () => {
                 new StateBuilder()
                     .withBrewListState((state) => ({
                         ...state,
-                        all: [
-                            new BrewBuilder("1").build(),
-                            new BrewBuilder("2").build(),
-                        ],
+                        idToBrew: {
+                            "1": new BrewBuilder("1").build(),
+                            "2": new BrewBuilder("2").build(),
+                        },
+                        list_by_most_recent: ["1", "2"],
                     }))
                     .build()
             ));

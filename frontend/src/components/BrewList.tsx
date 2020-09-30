@@ -5,15 +5,9 @@ import Table from "react-bootstrap/Table";
 
 import Brew from "models/Brew";
 import { RootState } from "store";
-import {
-    deleteBrewRequested,
-    fetchBrewsRequested,
-} from "store/brewList/actions";
+import { deleteBrewRequested, fetchBrewsRequested } from "store/brews/actions";
 
-const mapState = (state: RootState) => ({
-    brews: state.brewList.all,
-    fetchBrews: state.brewList.fetchBrews,
-});
+const mapState = (state: RootState) => state.brewList;
 
 const mapDispatch = {
     fetchBrewsRequested: fetchBrewsRequested,
@@ -25,8 +19,10 @@ const connector = connect(mapState, mapDispatch);
 type Props = ConnectedProps<typeof connector>;
 
 const BrewList: FunctionComponent<Props> = ({
-    brews,
-    fetchBrews,
+    isFetching,
+    errorFetching,
+    idToBrew,
+    list_by_most_recent,
     fetchBrewsRequested,
     deleteBrewRequested,
 }) => (
@@ -48,28 +44,32 @@ const BrewList: FunctionComponent<Props> = ({
                 </tr>
             </thead>
             <tbody>
-                {brews.map((brew: Brew) => (
-                    <tr key={brew.id}>
-                        <td>{brew.timestamp}</td>
-                        <td>{brew.bean}</td>
-                        <td>{brew.beanWeightInGrams}</td>
-                        <td>{brew.grinder}</td>
-                        <td>{brew.grindSetting}</td>
-                        <td>{brew.bloomTimeInSeconds}</td>
-                        <td>{brew.brewTimeInSeconds}</td>
-                        <td>{brew.waterWeightInGrams}</td>
-                        <td>{brew.comment}</td>
-                        <td>
-                            <Button onClick={(e) => deleteBrewRequested(brew)}>
-                                Delete
-                            </Button>
-                        </td>
-                    </tr>
-                ))}
+                {list_by_most_recent
+                    .map((brewId) => idToBrew[brewId])
+                    .map((brew: Brew) => (
+                        <tr key={brew.id}>
+                            <td>{brew.timestamp}</td>
+                            <td>{brew.bean}</td>
+                            <td>{brew.beanWeightInGrams}</td>
+                            <td>{brew.grinder}</td>
+                            <td>{brew.grindSetting}</td>
+                            <td>{brew.bloomTimeInSeconds}</td>
+                            <td>{brew.brewTimeInSeconds}</td>
+                            <td>{brew.waterWeightInGrams}</td>
+                            <td>{brew.comment}</td>
+                            <td>
+                                <Button
+                                    onClick={(e) => deleteBrewRequested(brew)}
+                                >
+                                    Delete
+                                </Button>
+                            </td>
+                        </tr>
+                    ))}
             </tbody>
         </Table>
-        {fetchBrews.isRunning && <div>Fetching ...</div>}
-        {fetchBrews.error && <div>Error: {fetchBrews.error}</div>}
+        {isFetching && <div>Fetching ...</div>}
+        {errorFetching && <div>Error: {errorFetching}</div>}
     </>
 );
 

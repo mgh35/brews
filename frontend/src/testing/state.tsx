@@ -1,6 +1,6 @@
 import { rootReducer, RootState } from "store";
 import { SWITCH_USER } from "store/auth/types";
-import { BrewListState } from "store/brewList/types";
+import { BrewsState } from "store/brews/types";
 import User from "models/User";
 import { createTestUser } from "./models";
 
@@ -8,7 +8,7 @@ export const InitialState = Object.freeze(
     rootReducer(undefined, { type: SWITCH_USER, user: null })
 );
 
-type BrewListStateTransformer = (state: BrewListState) => BrewListState;
+type BrewListStateTransformer = (state: BrewsState) => BrewsState;
 
 export class StateBuilder {
     state: RootState;
@@ -31,9 +31,9 @@ export class StateBuilder {
         return this;
     }
 
-    withBrewListState(brewListState: BrewListState | BrewListStateTransformer) {
+    withBrewListState(brewListState: BrewsState | BrewListStateTransformer) {
         const isTransformer = (
-            v: BrewListState | BrewListStateTransformer
+            v: BrewsState | BrewListStateTransformer
         ): v is BrewListStateTransformer => {
             return typeof brewListState === "function";
         };
@@ -51,7 +51,7 @@ export class StateBuilder {
         return this.state;
     }
 
-    buildBrewListState(): BrewListState {
+    buildBrewListState(): BrewsState {
         return this.state.brewList;
     }
 }

@@ -1,7 +1,9 @@
 import { v4 as uuidv4 } from "uuid";
 
+export type BrewID = string;
+
 interface Brew {
-    id: string;
+    id: BrewID;
     timestamp: string | null;
     bean: string | null;
     beanWeightInGrams: number | null;
@@ -14,7 +16,7 @@ interface Brew {
 }
 
 export class BrewBuilder {
-    id: string;
+    id: BrewID;
     timestamp: string | null = null;
     bean: string | null = null;
     beanWeightInGrams: number | null = null;
@@ -25,7 +27,7 @@ export class BrewBuilder {
     waterWeightInGrams: number | null = null;
     comment: string | null = null;
 
-    constructor(id?: string) {
+    constructor(id?: BrewID) {
         this.id = id !== undefined ? id : uuidv4();
     }
 
