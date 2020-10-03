@@ -91,9 +91,17 @@ describe("BrewInputPanel", () => {
     describe("on pressing Add", () => {
         let brewsApi: MockBrewsApi;
         let addBrewButton: HTMLElement;
+        let onSuccess: jest.Mock;
         beforeEach(async () => {
             brewsApi = new MockBrewsApi().setCapturePromises(true);
-            render(<BrewInputPanel user={testUser} brewsApi={brewsApi} />);
+            onSuccess = jest.fn();
+            render(
+                <BrewInputPanel
+                    user={testUser}
+                    brewsApi={brewsApi}
+                    onSuccess={onSuccess}
+                />
+            );
             addBrewButton = screen.getByText("Add Brew");
             await act(async () => {
                 for (const { name, sampleValue } of Object.values(
@@ -127,6 +135,10 @@ describe("BrewInputPanel", () => {
             });
         });
 
+        it("does not call onSuccess yet", () => {
+            expect(onSuccess).not.toBeCalled();
+        });
+
         describe("successful return", () => {
             beforeEach(async () => {
                 await act(async () => {
@@ -149,6 +161,10 @@ describe("BrewInputPanel", () => {
                 it("is cleared out", () => {
                     expect(screen.getByLabelText(name).value).toEqual("");
                 });
+            });
+
+            it("calls onSuccess", () => {
+                expect(onSuccess).toBeCalled();
             });
         });
 
@@ -185,6 +201,10 @@ describe("BrewInputPanel", () => {
                 expect(
                     screen.queryByText("Some bad error!")
                 ).toBeInTheDocument();
+            });
+
+            it("does not call onSuccess", () => {
+                expect(onSuccess).not.toBeCalled();
             });
         });
     });

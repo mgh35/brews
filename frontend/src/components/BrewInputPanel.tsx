@@ -19,12 +19,14 @@ type Props = {
     user: PossibleUser;
     brewsApi: BrewsApi;
     modelBrew?: Brew | null;
+    onSuccess?: () => void | null;
 };
 
 export const BrewInputPanel: FunctionComponent<Props> = ({
     user,
     brewsApi,
     modelBrew = null,
+    onSuccess = null,
 }) => {
     const [errorMessage, setErrorMessage] = useState(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -41,6 +43,9 @@ export const BrewInputPanel: FunctionComponent<Props> = ({
                             makeBrewFromFormValues(values)
                         );
                         resetForm();
+                        if (onSuccess) {
+                            onSuccess();
+                        }
                     } catch (err) {
                         const message =
                             err instanceof Error ? err.message : err;
