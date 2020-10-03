@@ -15,6 +15,8 @@ interface Brew {
     comment: string | null;
 }
 
+export const createNewBrewId = (): BrewID => uuidv4();
+
 export class BrewBuilder {
     id: BrewID;
     timestamp: string | null = null;
@@ -28,7 +30,7 @@ export class BrewBuilder {
     comment: string | null = null;
 
     constructor(id?: BrewID) {
-        this.id = id !== undefined ? id : uuidv4();
+        this.id = id !== undefined ? id : createNewBrewId();
     }
 
     withTimestamp(timestamp: string | null) {

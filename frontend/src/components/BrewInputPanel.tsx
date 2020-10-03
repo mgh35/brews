@@ -13,26 +13,18 @@ import { RootState } from "store";
 import { PossibleUser } from "store/auth/types";
 import { BrewsFromDynamoDb } from "apis/brewsFromDynamoDb";
 import { BrewsApi } from "apis";
+import { BrewsState } from "store/brews/types";
 
 type Props = {
     user: PossibleUser;
     brewsApi: BrewsApi;
+    modelBrew?: Brew | null;
 };
-
-const initialValues = Object.freeze({
-    bean: "",
-    beanWeightInGrams: "",
-    grinder: "",
-    grindSetting: "",
-    bloomTimeInSeconds: "",
-    brewTimeInSeconds: "",
-    waterWeightInGrams: "",
-    comment: "",
-});
 
 export const BrewInputPanel: FunctionComponent<Props> = ({
     user,
     brewsApi,
+    modelBrew = null,
 }) => {
     const [errorMessage, setErrorMessage] = useState(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -40,12 +32,10 @@ export const BrewInputPanel: FunctionComponent<Props> = ({
     return (
         <>
             <Formik
-                initialValues={initialValues}
-                onSubmit={async (values, { resetForm, ...rest }) => {
+                initialValues={makeInitialValuesFromModelBrew(modelBrew)}
+                onSubmit={async (values, { resetForm }) => {
                     try {
                         setIsSubmitting(true);
-                        // await new Promise((r) => setTimeout(r, 1000));
-                        // throw new Error("Some bad thing");
                         await brewsApi.addBrewForUser(
                             user!,
                             makeBrewFromFormValues(values)
@@ -209,7 +199,31 @@ export const BrewInputPanel: FunctionComponent<Props> = ({
     );
 };
 
-const makeBrewFromFormValues = (values: typeof initialValues): Brew => {
+const emptyInitialValues = Object.freeze({
+    bean: "",
+    beanWeightInGrams: "",
+    grinder: "",
+    grindSetting: "",
+    bloomTimeInSeconds: "",
+    brewTimeInSeconds: "",
+    waterWeightInGrams: "",
+    comment: "",
+});
+
+type ValuesType = typeof emptyInitialValues;
+
+const makeInitialValuesFromModelBrew = (modelBrew: Brew | null): ValuesType => {
+    const overlay = modelBrew
+        ? {
+              bean: modelBrew.bean,
+              grinder: modelBrew.grinder,
+              grindSetting: modelBrew.grindSetting,
+          }
+        : {};
+    return Object.assign({}, emptyInitialValues, overlay);
+};
+
+const makeBrewFromFormValues = (values: typeof emptyInitialValues): Brew => {
     const value = (name: keyof typeof values) => values[name] || null;
     return new BrewBuilder()
         .withCurrentTimestamp()
@@ -229,6 +243,13 @@ const defaultBrewsApi: BrewsApi = new BrewsFromDynamoDb();
 const mapState = (state: RootState) => ({
     user: state.auth.user,
     brewsApi: defaultBrewsApi,
+    modelBrew: getLatestBrew(state.brewList),
 });
+
+const getLatestBrew = (brewsState: BrewsState): Brew | null => {
+    return brewsState.list_by_most_recent
+        ? brewsState.idToBrew[brewsState.list_by_most_recent[0]]
+        : null;
+};
 
 export default connect(mapState)(BrewInputPanel);
