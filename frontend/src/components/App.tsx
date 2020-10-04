@@ -1,15 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { connect, ConnectedProps } from "react-redux";
 import { BrowserRouter, Route, Switch, useHistory } from "react-router-dom";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
 
-import { withAuthenticator } from "@aws-amplify/ui-react";
-
 import Header from "components/Header";
 import BrewList from "components/BrewList";
 import BrewInputPanel from "components/BrewInputPanel";
+import { fetchBrewsRequested } from "store/brews/actions";
+import { RootState } from "store";
 
 function MainPage() {
     const history = useHistory();
@@ -53,20 +54,47 @@ function MainPage() {
     );
 }
 
-function BrewInputPage() {
-    const history = useHistory();
-    return (
-        <>
-            <BrewInputPanel
-                onSuccess={() => {
-                    history.replace("/");
-                }}
-            />
-        </>
-    );
-}
+const brewInputPageConnector = connect(null, {
+    fetchBrews: fetchBrewsRequested,
+});
 
-export function UnauthedApp() {
+type BrewInputPageProps = ConnectedProps<typeof brewInputPageConnector>;
+
+const BrewInputPage = brewInputPageConnector(
+    ({ fetchBrews }: BrewInputPageProps) => {
+        const history = useHistory();
+        return (
+            <>
+                <BrewInputPanel
+                    onSuccess={() => {
+                        fetchBrews();
+                        history.replace("/");
+                    }}
+                />
+            </>
+        );
+    }
+);
+
+const mapState = (state: RootState) => ({
+    auth: state.auth,
+});
+
+const mapDispatch = {
+    fetchBrews: fetchBrewsRequested,
+};
+
+const connector = connect(mapState, mapDispatch);
+
+type Props = ConnectedProps<typeof connector>;
+
+const App = ({ auth, fetchBrews }: Props) => {
+    useEffect(() => {
+        if (auth.user) {
+            fetchBrews();
+        }
+    }, [auth, fetchBrews]);
+
     return (
         <>
             <BrowserRouter>
@@ -87,6 +115,6 @@ export function UnauthedApp() {
             </BrowserRouter>
         </>
     );
-}
+};
 
-export default withAuthenticator(UnauthedApp);
+export default connector(App);

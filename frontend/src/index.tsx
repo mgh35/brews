@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import AWS from "aws-sdk";
 import Amplify from "aws-amplify";
+import { withAuthenticator } from "@aws-amplify/ui-react";
 
 import App from "components/App";
 import config from "config";
@@ -17,11 +18,13 @@ Amplify.configure(config.AWS_AMPLIFY_CONFIG);
 const store = configureStore();
 new AmplifyBridge(store);
 
+const AuthedApp = withAuthenticator(App);
+
 ReactDOM.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
-  </React.StrictMode>,
-  document.getElementById("root")
+    <React.StrictMode>
+        <Provider store={store}>
+            <AuthedApp />
+        </Provider>
+    </React.StrictMode>,
+    document.getElementById("root")
 );

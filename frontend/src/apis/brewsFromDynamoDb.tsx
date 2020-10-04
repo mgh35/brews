@@ -57,7 +57,6 @@ export class BrewsFromDynamoDb implements BrewsApi {
     _authed_db(): Promise<DynamoDB.DocumentClient> {
         const params = config.DYNAMODB_CONFIG;
         if (params.is_local) {
-            console.log("local");
             return Promise.resolve(new DynamoDB.DocumentClient(params));
         }
         return Auth.currentUserCredentials().then(
