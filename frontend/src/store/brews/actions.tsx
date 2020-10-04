@@ -30,7 +30,7 @@ export function fetchBrewsSucceeded(brews: Brew[]): FetchBrewsSucceededAction {
 export function fetchBrewsFailed(error: string): FetchBrewsFailedAction {
     return {
         type: FETCH_BREWS_FAILED,
-        error: error,
+        error: errorStringFromError(error),
     };
 }
 

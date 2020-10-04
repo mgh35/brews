@@ -2,6 +2,12 @@ import React, { FunctionComponent } from "react";
 import { connect, ConnectedProps } from "react-redux";
 import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
+import Alert from "react-bootstrap/Alert";
+import Spinner from "react-bootstrap/Spinner";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import { RefreshCw } from "react-feather";
 
 import Brew from "models/Brew";
 import { RootState } from "store";
@@ -27,7 +33,29 @@ const BrewList: FunctionComponent<Props> = ({
     deleteBrewRequested,
 }) => (
     <>
-        <Button onClick={fetchBrewsRequested}>Refresh</Button>
+        <Container>
+            <Row>
+                <Col xs="1">
+                    {isFetching ? (
+                        <Spinner
+                            animation="border"
+                            role="status"
+                            variant="primary"
+                        />
+                    ) : (
+                        <RefreshCw color="blue" onClick={fetchBrewsRequested} />
+                    )}
+                </Col>
+                <Col>
+                    {errorFetching && (
+                        <Alert variant="danger">
+                            <strong>Error fetching brews:</strong>
+                            {errorFetching}
+                        </Alert>
+                    )}
+                </Col>
+            </Row>
+        </Container>
         <Table striped bordered hover>
             <thead>
                 <tr>
@@ -68,8 +96,6 @@ const BrewList: FunctionComponent<Props> = ({
                     ))}
             </tbody>
         </Table>
-        {isFetching && <div>Fetching ...</div>}
-        {errorFetching && <div>Error: {errorFetching}</div>}
     </>
 );
 

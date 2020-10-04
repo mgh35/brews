@@ -1,6 +1,7 @@
 import React, { FunctionComponent, useState } from "react";
 import { connect } from "react-redux";
 import { Formik, Field } from "formik";
+import Alert from "react-bootstrap/Alert";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import FormGroup from "react-bootstrap/FormGroup";
@@ -198,13 +199,10 @@ export const BrewInputPanel: FunctionComponent<Props> = ({
                             <Button type="submit">Add Brew</Button>
                         </fieldset>
                         {errorMessage && (
-                            <div
-                                className="alert alert-warning alert-dismissible fade show"
-                                role="alert"
-                            >
+                            <Alert variant="danger" role="alert">
                                 <strong>Error adding brew:</strong>
-                                {errorMessage}
-                            </div>
+                                {String(errorMessage)}
+                            </Alert>
                         )}
                     </Form>
                 )}
