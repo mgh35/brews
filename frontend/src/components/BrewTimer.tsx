@@ -18,20 +18,12 @@ const BrewTimer = ({ onRecord }: Props) => {
     const [hasStarted, setHasStarted] = useState(false);
     const [startTime, setStartTime] = useState<number | null>(null);
 
-    const elapsedTime = () => {
-        if (startTime) {
-            return (Date.now() - startTime!) / 1000;
-        } else {
-            return NaN;
-        }
-    };
-
     const toggleRunning = () => {
         if (isRunning) {
             setIsRunning(false);
             if (onRecord) {
                 onRecord({
-                    totalTime: elapsedTime(),
+                    totalTime: _elapsedTimeSince(startTime),
                 });
             }
         } else {
@@ -56,7 +48,7 @@ const BrewTimer = ({ onRecord }: Props) => {
     useEffect(() => {
         if (isRunning) {
             const interval = setInterval(() => {
-                setTime(elapsedTime());
+                setTime(_elapsedTimeSince(startTime));
             }, 1000);
             return () => {
                 clearInterval(interval);
@@ -95,6 +87,14 @@ const BrewTimer = ({ onRecord }: Props) => {
 
 const _displayTime = (time: number): String => {
     return `${Math.floor(time)}s`;
+};
+
+const _elapsedTimeSince = (since: number | null) => {
+    if (since) {
+        return (Date.now() - since) / 1000;
+    } else {
+        return NaN;
+    }
 };
 
 export default BrewTimer;
