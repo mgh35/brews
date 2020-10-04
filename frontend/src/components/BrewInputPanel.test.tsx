@@ -308,6 +308,27 @@ describe("BrewInputPanel", () => {
         });
     });
 
+    describe("with a ModelBrew having nulls", () => {
+        let modelBrew: Brew;
+        beforeEach(() => {
+            modelBrew = new BrewBuilder()
+                .withBean("Gesha")
+                .withComment("Yummy")
+                .build();
+            render(
+                <BrewInputPanel
+                    user={testUser}
+                    brewsApi={new MockBrewsApi()}
+                    modelBrew={modelBrew}
+                />
+            );
+        });
+
+        it("sets empty on field where model brew is null", () => {
+            expect(screen.getByLabelText("Grinder").value).toEqual("");
+        });
+    });
+
     describe("with a changed ModelBrew", () => {
         let origModelBrew: Brew;
         let newModelBrew: Brew;

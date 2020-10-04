@@ -227,9 +227,9 @@ type ValuesType = typeof emptyInitialValues;
 const makeInitialValuesFromModelBrew = (modelBrew: Brew | null): ValuesType => {
     const overlay = modelBrew
         ? {
-              bean: modelBrew.bean,
-              grinder: modelBrew.grinder,
-              grindSetting: modelBrew.grindSetting,
+              bean: modelBrew.bean || "",
+              grinder: modelBrew.grinder || "",
+              grindSetting: modelBrew.grindSetting || "",
           }
         : {};
     return Object.assign({}, emptyInitialValues, overlay);
