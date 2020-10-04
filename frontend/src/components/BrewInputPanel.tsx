@@ -255,7 +255,7 @@ const defaultBrewsApi: BrewsApi = new BrewsFromDynamoDb();
 const mapState = (state: RootState) => ({
     user: state.auth.user,
     brewsApi: defaultBrewsApi,
-    modelBrew: getLatestBrew(state.brewList),
+    modelBrew: getLatestBrew(state.brews),
 });
 
 const getLatestBrew = (brewsState: BrewsState): Brew | null => {

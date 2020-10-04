@@ -36,7 +36,7 @@ export interface DeleteBrewFailedAction {
     error: string;
 }
 
-export type BrewListAction =
+export type BrewsAction =
     | FetchBrewsRequestedAction
     | FetchBrewsSucceededAction
     | FetchBrewsFailedAction

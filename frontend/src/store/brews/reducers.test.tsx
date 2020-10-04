@@ -14,7 +14,7 @@ describe("FETCH_BREWS_SUCCEEDED", () => {
     beforeAll(() => {
         state = reducer(
             new StateBuilder()
-                .withBrewListState((state) => ({
+                .withBrewsState((state) => ({
                     ...state,
                     isFetching: true,
                     idToBrew: {
@@ -23,7 +23,7 @@ describe("FETCH_BREWS_SUCCEEDED", () => {
                     },
                     all: ["1", "2"],
                 }))
-                .buildBrewListState(),
+                .buildBrewsState(),
             {
                 type: FETCH_BREWS_SUCCEEDED,
                 brews: [
@@ -65,12 +65,12 @@ describe("DELETE_BREWS_REQUEST", () => {
     beforeAll(() => {
         state = reducer(
             new StateBuilder()
-                .withBrewListState((state) => ({
+                .withBrewsState((state) => ({
                     ...state,
                     isDeleting: false,
                     errorDeleting: "Some error",
                 }))
-                .buildBrewListState(),
+                .buildBrewsState(),
             {
                 type: DELETE_BREW_REQUESTED,
                 brew: new BrewBuilder().build(),
@@ -93,7 +93,7 @@ describe("DELETE_BREW_SUCCEEDED", () => {
     beforeAll(() => {
         state = reducer(
             new StateBuilder()
-                .withBrewListState((state) => ({
+                .withBrewsState((state) => ({
                     ...state,
                     idToBrew: {
                         "1": new BrewBuilder("1").build(),
@@ -101,7 +101,7 @@ describe("DELETE_BREW_SUCCEEDED", () => {
                     },
                     list_by_most_recent: ["1", "2"],
                 }))
-                .buildBrewListState(),
+                .buildBrewsState(),
             {
                 type: DELETE_BREW_SUCCEEDED,
                 brew: brewToDelete,
@@ -127,12 +127,12 @@ describe("DELETE_BREWS_FAILED", () => {
     beforeAll(() => {
         state = reducer(
             new StateBuilder()
-                .withBrewListState((state) => ({
+                .withBrewsState((state) => ({
                     ...state,
                     isDeleting: true,
                     errorDeleting: null,
                 }))
-                .buildBrewListState(),
+                .buildBrewsState(),
             {
                 type: DELETE_BREW_FAILED,
                 error: "Some error",

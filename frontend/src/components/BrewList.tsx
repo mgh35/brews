@@ -13,7 +13,7 @@ import Brew from "models/Brew";
 import { RootState } from "store";
 import { deleteBrewRequested, fetchBrewsRequested } from "store/brews/actions";
 
-const mapState = (state: RootState) => state.brewList;
+const mapState = (state: RootState) => state.brews;
 
 const mapDispatch = {
     fetchBrewsRequested: fetchBrewsRequested,

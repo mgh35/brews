@@ -8,7 +8,7 @@ export const InitialState = Object.freeze(
     rootReducer(undefined, { type: SWITCH_USER, user: null })
 );
 
-type BrewListStateTransformer = (state: BrewsState) => BrewsState;
+type BrewsStateTransformer = (state: BrewsState) => BrewsState;
 
 export class StateBuilder {
     state: RootState;
@@ -31,18 +31,18 @@ export class StateBuilder {
         return this;
     }
 
-    withBrewListState(brewListState: BrewsState | BrewListStateTransformer) {
+    withBrewsState(brewsState: BrewsState | BrewsStateTransformer) {
         const isTransformer = (
-            v: BrewsState | BrewListStateTransformer
-        ): v is BrewListStateTransformer => {
-            return typeof brewListState === "function";
+            v: BrewsState | BrewsStateTransformer
+        ): v is BrewsStateTransformer => {
+            return typeof brewsState === "function";
         };
 
-        const newBrewListState = isTransformer(brewListState)
-            ? brewListState(this.state.brewList)
-            : brewListState;
+        const newBrewsState = isTransformer(brewsState)
+            ? brewsState(this.state.brews)
+            : brewsState;
         this.state = Object.assign({}, this.state, {
-            brewList: newBrewListState,
+            brews: newBrewsState,
         });
         return this;
     }
@@ -51,7 +51,7 @@ export class StateBuilder {
         return this.state;
     }
 
-    buildBrewListState(): BrewsState {
-        return this.state.brewList;
+    buildBrewsState(): BrewsState {
+        return this.state.brews;
     }
 }

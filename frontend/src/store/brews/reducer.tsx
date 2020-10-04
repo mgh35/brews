@@ -1,6 +1,6 @@
 import {
     BrewsState,
-    BrewListAction,
+    BrewsAction,
     FETCH_BREWS_REQUESTED,
     FETCH_BREWS_SUCCEEDED,
     FETCH_BREWS_FAILED,
@@ -21,7 +21,7 @@ const initialState: BrewsState = {
 
 export default function (
     state: BrewsState = initialState,
-    action: BrewListAction
+    action: BrewsAction
 ): BrewsState {
     switch (action.type) {
         case FETCH_BREWS_REQUESTED:

@@ -36,7 +36,7 @@ describe("BrewList", () => {
             ({ rendered, store } = render(
                 <BrewList />,
                 new StateBuilder()
-                    .withBrewListState((state) => ({
+                    .withBrewsState((state) => ({
                         ...state,
                         idToBrew: {
                             "1": new BrewBuilder("1").build(),

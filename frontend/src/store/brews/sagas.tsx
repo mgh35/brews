@@ -52,7 +52,7 @@ function* deleteBrew(action: DeleteBrewRequestedAction) {
     }
 }
 
-export default function* brewListSagas() {
+export default function* brewsSagas() {
     yield all([
         takeLatest(FETCH_BREWS_REQUESTED, fetchBrews),
         takeEvery(DELETE_BREW_REQUESTED, deleteBrew),

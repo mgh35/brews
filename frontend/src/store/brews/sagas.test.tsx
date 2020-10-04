@@ -1,7 +1,7 @@
 import { getSagaTester, RootSagaTester } from "testing/sagas";
 import { DELETE_BREW_SUCCEEDED, DELETE_BREW_FAILED } from "./types";
 import { deleteBrewRequested } from "./actions";
-import brewListSagas from "./sagas";
+import brewsSagas from "./sagas";
 import Brew, { BrewBuilder } from "models/Brew";
 import { MockBrewsApi } from "testing/apis";
 import { StateBuilder } from "testing/state";
@@ -31,7 +31,7 @@ describe("deleteBrewSaga", () => {
             tester = getSagaTester(
                 new StateBuilder()
                     .withUser(user)
-                    .withBrewListState((state) => ({
+                    .withBrewsState((state) => ({
                         ...state,
                         idToBrew: brews,
                         list_by_most_recent: Object.values(brews).map(
@@ -41,18 +41,18 @@ describe("deleteBrewSaga", () => {
                     .build(),
                 brewsApi
             );
-            tester.start(brewListSagas);
+            tester.start(brewsSagas);
 
             tester.dispatch(deleteBrewRequested(brewToDelete));
             await tester.waitFor(DELETE_BREW_SUCCEEDED);
         });
 
         it("is not marked as running", () => {
-            expect(tester.getState().brewList.isDeleting).toBeFalsy();
+            expect(tester.getState().brews.isDeleting).toBeFalsy();
         });
 
         it("is not marked as error", () => {
-            expect(tester.getState().brewList.errorDeleting).toBeNull();
+            expect(tester.getState().brews.errorDeleting).toBeNull();
         });
 
         it("made API call to brewsApi", () => {
@@ -82,18 +82,18 @@ describe("deleteBrewSaga", () => {
                 new StateBuilder().withTestUser().build(),
                 brewsApi
             );
-            tester.start(brewListSagas);
+            tester.start(brewsSagas);
 
             tester.dispatch(deleteBrewRequested(new BrewBuilder().build()));
             await tester.waitFor(DELETE_BREW_FAILED);
         });
 
         it("is not marked as running", () => {
-            expect(tester.getState().brewList.isDeleting).toBeFalsy();
+            expect(tester.getState().brews.isDeleting).toBeFalsy();
         });
 
         it("is has set the expected error", () => {
-            expect(tester.getState().brewList.errorDeleting).not.toBeNull();
+            expect(tester.getState().brews.errorDeleting).not.toBeNull();
         });
     });
 });
