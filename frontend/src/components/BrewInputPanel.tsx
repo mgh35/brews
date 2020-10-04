@@ -14,6 +14,7 @@ import { PossibleUser } from "store/auth/types";
 import { BrewsFromDynamoDb } from "apis/brewsFromDynamoDb";
 import { BrewsApi } from "apis";
 import { BrewsState } from "store/brews/types";
+import BrewTimer from "./BrewTimer";
 
 type Props = {
     user: PossibleUser;
@@ -159,6 +160,14 @@ export const BrewInputPanel: FunctionComponent<Props> = ({
                                         {formik.errors.brewTimeInSeconds}
                                     </div>
                                 )}
+                                <BrewTimer
+                                    onRecord={({ totalTime }) =>
+                                        formik.setFieldValue(
+                                            "brewTimeInSeconds",
+                                            totalTime
+                                        )
+                                    }
+                                />
                             </FormGroup>
                             <FormGroup controlId="waterWeightInGrams">
                                 <FormLabel>Water Weight (g)</FormLabel>

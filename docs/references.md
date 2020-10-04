@@ -80,7 +80,11 @@ https://github.com/freshollie/jest-dynalite
 
 https://blog.caplin.com/2017/01/04/screenplay-pattern-a-solid-alternative-pattern-to-page-objects/
 
-# UI
+https://codewithhugo.com/mocking-the-current-date-in-jest-tests/
+
+https://jestjs.io/docs/en/timer-mocks
+
+## UI
 
 https://react-bootstrap.github.io/components
 
