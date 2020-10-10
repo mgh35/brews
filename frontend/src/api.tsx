@@ -3,11 +3,9 @@ import DynamoDB from "aws-sdk/clients/dynamodb";
 
 import config from "config";
 
-import User from "models/User";
-import Brew, { BrewBuilder } from "models/Brew";
-import { BrewsApi } from "apis";
+import { User, Brew } from "models";
 
-export class BrewsFromDynamoDb implements BrewsApi {
+export class BrewsFromDynamoDb {
     fetchBrewsForUser(user: User) {
         return this._authed_db().then((db) =>
             db
@@ -77,16 +75,6 @@ export class BrewsFromDynamoDb implements BrewsApi {
     }
 
     _makeBrewFromItem(item: any): Brew {
-        return new BrewBuilder(item.id)
-            .withTimestamp(item.timestamp)
-            .withBean(item.bean)
-            .withBeanWeightInGrams(item.beanWeightInGrams)
-            .withGrinder(item.grinder)
-            .withGrindSetting(item.grindSetting)
-            .withBloomTimeInSeconds(item.bloomTimeInSeconds)
-            .withBrewTimeInSeconds(item.brewTimeInSeconds)
-            .withWaterWeightInGrams(item.waterWeightInGrams)
-            .withComment(item.comment)
-            .build();
+        return item;
     }
 }

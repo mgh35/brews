@@ -237,3 +237,45 @@ My suspicion is that:
   - I'm not sure how to keep that without writing useless tests. Maybe it's actually
     best to just wait until a test is actually wanted.
 - It would be valuable to have some integration tests to record use-cases.
+
+# 2020-10-10
+
+Using the app now for a week or so, it's readily apparent that it's worse than the
+spreadsheet I was using previously. Not surprising since this exercise has primarily
+focussed on learning about React & Redux, rather than building the product. But I feel
+like that has run it's course and I want to build the product that initially started
+this.
+
+The outcomes that need to be addressed:
+
+- The input should be easy.
+- It should be quick to iterate on ideas around new inputs (including new types of
+  inputs).
+- There should be measures of qualitative measures.
+
+The experience starting to work through issues evidences that the current stack fails on
+all counts. Key problems:
+
+- Testing. The current state of the tests is a hindrance to speed and hasn't yet shown
+  to add any value. (A rough subjective accounting makes me think most of the time
+  spent has been building tests.)
+- Dispersed structures. Changes propagate widely through the system despite just being
+  an input form.
+- Rigid models. Because of the infrastructure around the model, changes to the model
+  have already become difficult.
+
+and what seemed to be working well:
+
+- React. The dynamic components seemed to be exactly what was wanted.
+- Typing. So nice to have in the JS sphere. That also seems to be part of what makes the
+  testing much less relevant.
+
+So, following the best front-end dev I know, I'm going to "refactor." Scrapping the lot
+and starting again given what I've learnt so far. This time, focus is on delivering a
+useful product.
+
+The intent with the new version is to follow the guiding principles:
+
+- The app is just there to ease recording of data.
+- The app should be very quick to change.
+- The data model needs to be easy to evolve (without losing previous data).
