@@ -6,6 +6,8 @@ import Amplify from "aws-amplify";
 import App from "App";
 import config from "config";
 
+import "bootstrap/dist/css/bootstrap.min.css";
+
 AWS.config.update(config.AWS_SDK_CONFIG);
 Amplify.configure(config.AWS_AMPLIFY_CONFIG);
 
