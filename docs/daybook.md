@@ -279,3 +279,13 @@ The intent with the new version is to follow the guiding principles:
 - The app is just there to ease recording of data.
 - The app should be very quick to change.
 - The data model needs to be easy to evolve (without losing previous data).
+
+# 2010-10-11
+
+Already stuck with indecision in the refactor. Rediscovered [5] from the Zen of Python:
+
+```
+Flat is better than nested.
+```
+
+Must `import this` more often.
