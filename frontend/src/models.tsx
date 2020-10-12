@@ -1,54 +1,32 @@
+import * as yup from "yup";
+
 export interface User {
     id: string;
     username: string;
 }
 
-export interface Bean {
-    name?: string;
-    producer?: string;
-    region?: string;
-    variety?: string;
-    process?: string;
-    roaster?: string;
-    roastDate?: Date;
-}
+export const BrewSchema = yup
+    .object({
+        id: yup.string().ensure().required(),
+        version: yup.string().ensure().required(),
+        timestamp: yup.string().ensure(),
+        beanName: yup.string().ensure(),
+        beanProducer: yup.string().ensure(),
+        beanRegion: yup.string().ensure(),
+        beanVariety: yup.string().ensure(),
+        beanProcess: yup.string().ensure(),
+        beanRoaster: yup.string().ensure(),
+        beanRoastDate: yup.string().ensure(),
+        grinderType: yup.string().ensure(),
+        grinderSetting: yup.number().integer().positive(),
+        brewCoffeeMass: yup.number().positive(),
+        brewWaterMass: yup.number().positive(),
+        brewTotalTime: yup.number().positive(),
+        tasteOverall: yup
+            .string()
+            .ensure()
+            .matches(/^(bad|ok|good|)$/),
+    })
+    .required();
 
-export interface Grind {
-    grinder?: string;
-    grindSetting?: number;
-}
-
-export interface BrewStage {
-    name?: string;
-    time?: number;
-    waterMass?: number;
-}
-
-export enum BrewMethod {
-    V60 = "V60",
-}
-
-export interface Recipe {
-    id: string;
-    name: string;
-    method: BrewMethod;
-    coffeeMass: number;
-    waterMass: number;
-    stages: BrewStage[];
-}
-
-export interface Trace {
-    coffeeMass?: number;
-    waterMass?: number;
-    totalTime?: number;
-    stages?: BrewStage[];
-}
-
-export interface Brew {
-    id: string;
-    timestamp?: Date;
-    bean?: Bean;
-    grind?: Grind;
-    recipe?: Recipe;
-    trace?: Trace;
-}
+export type Brew = yup.InferType<typeof BrewSchema>;
