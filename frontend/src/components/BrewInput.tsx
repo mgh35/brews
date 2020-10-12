@@ -1,6 +1,12 @@
 import React, { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { Formik, Field, FieldProps } from "formik";
+import {
+    Formik,
+    Field,
+    FieldProps,
+    useFormikContext,
+    FormikProps,
+} from "formik";
 import Alert from "react-bootstrap/Alert";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
@@ -10,9 +16,9 @@ import FormControl from "react-bootstrap/FormControl";
 import ToggleButton from "react-bootstrap/ToggleButton";
 import ToggleButtonGroup from "react-bootstrap/ToggleButtonGroup";
 
-import { BrewsStore } from "core";
-import { BrewSchema, Brew } from "models";
-import BrewTimer from "BrewTimer";
+import { BrewsStore } from "application/brewsStore";
+import { BrewSchema, Brew } from "models/brew";
+import BrewTimer from "components/BrewTimer";
 
 interface Props {
     brewsStore: BrewsStore;
@@ -55,37 +61,6 @@ const BrewInput = ({ brewsStore }: Props) => {
                 validationSchema={BrewSchema}
             >
                 {(formik) => {
-                    interface BrewFieldProps {
-                        id: keyof Brew;
-                        label: string;
-                    }
-
-                    const BrewField = ({ id, label }: BrewFieldProps) => {
-                        return (
-                            <FormGroup controlId={id}>
-                                <FormLabel>{label}</FormLabel>
-                                <Field
-                                    as={FormControl}
-                                    type="text"
-                                    name={id}
-                                    value={
-                                        formik.values[id] === undefined
-                                            ? ""
-                                            : formik.values[id]
-                                    }
-                                    className={
-                                        formik.errors[id] ? "is-invalid" : ""
-                                    }
-                                />
-                                {formik.errors[id] && (
-                                    <FormControl.Feedback type="invalid">
-                                        {formik.errors[id]}
-                                    </FormControl.Feedback>
-                                )}
-                            </FormGroup>
-                        );
-                    };
-
                     return (
                         <Form
                             className="mx-auto"
@@ -122,10 +97,13 @@ const BrewInput = ({ brewsStore }: Props) => {
                                     />
                                 </fieldset>
                                 <fieldset>
-                                    <legend>Grinder</legend>
-                                    <BrewField id="grinderType" label="Type" />
+                                    <legend>Grind</legend>
                                     <BrewField
-                                        id="grinderSetting"
+                                        id="grindGrinder"
+                                        label="Grinder"
+                                    />
+                                    <BrewField
+                                        id="grindSetting"
                                         label="Setting"
                                     />
                                 </fieldset>
@@ -207,6 +185,32 @@ const BrewInput = ({ brewsStore }: Props) => {
     );
 };
 
+interface BrewFieldProps {
+    id: keyof Brew;
+    label: string;
+}
+
+const BrewField = ({ id, label }: BrewFieldProps) => {
+    const { values, errors }: FormikProps<Brew> = useFormikContext();
+    return (
+        <FormGroup controlId={id}>
+            <FormLabel>{label}</FormLabel>
+            <Field
+                as={FormControl}
+                type="text"
+                name={id}
+                value={values[id] === undefined ? "" : values[id]}
+                className={errors[id] ? "is-invalid" : ""}
+            />
+            {errors[id] && (
+                <FormControl.Feedback type="invalid">
+                    {errors[id]}
+                </FormControl.Feedback>
+            )}
+        </FormGroup>
+    );
+};
+
 const _createNewBrew = (modelBrew: Brew | null): Brew => {
     const prototypeBrew = modelBrew
         ? {
@@ -217,8 +221,8 @@ const _createNewBrew = (modelBrew: Brew | null): Brew => {
               beanProcess: modelBrew.beanProcess,
               beanRoaster: modelBrew.beanRoaster,
               beanRoastDate: modelBrew.beanRoastDate,
-              grinderType: modelBrew.grinderType,
-              grinderSetting: modelBrew.grinderSetting,
+              grindGrinder: modelBrew.grindGrinder,
+              grindSetting: modelBrew.grindSetting,
           }
         : {};
 

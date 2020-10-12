@@ -3,7 +3,8 @@ import DynamoDB from "aws-sdk/clients/dynamodb";
 
 import config from "config";
 
-import { User, Brew } from "models";
+import { Brew } from "models/brew";
+import { User } from "models/user";
 
 export class BrewsFromDynamoDb {
     fetchBrewsForUser(user: User) {

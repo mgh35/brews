@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import AWS from "aws-sdk";
 import Amplify from "aws-amplify";
 
-import App from "App";
+import App from "components/App";
 import config from "config";
 
 import "bootstrap/dist/css/bootstrap.min.css";

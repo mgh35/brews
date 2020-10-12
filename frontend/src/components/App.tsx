@@ -4,9 +4,9 @@ import { withAuthenticator } from "@aws-amplify/ui-react";
 import Alert from "react-bootstrap/Alert";
 import Spinner from "react-bootstrap/Spinner";
 
-import { User } from "models";
-import BrewInput from "BrewInput";
-import { BrewsStore } from "core";
+import { User } from "models/user";
+import BrewInput from "components/BrewInput";
+import { BrewsStore } from "application/brewsStore";
 
 function App() {
     const [loadingMessage, setLoadingMessage] = useState("");

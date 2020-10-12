@@ -1,5 +1,6 @@
-import { User, Brew } from "models";
-import { BrewsFromDynamoDb } from "api";
+import { Brew } from "models/brew";
+import { User } from "models/user";
+import { BrewsFromDynamoDb } from "api/brewsFromDynamoDb";
 
 export class BrewsStore {
     private user: User;
