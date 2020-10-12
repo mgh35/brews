@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { Formik, Field, FormikProps, FieldProps } from "formik";
+import Alert from "react-bootstrap/Alert";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import FormGroup from "react-bootstrap/FormGroup";
@@ -60,9 +61,13 @@ const BrewInput = ({ user }: Props) => {
                 onSubmit={async (values) => {
                     try {
                         setIsSubmitting(true);
-                        console.log(JSON.stringify(user));
-                        console.log(JSON.stringify(values));
-                        // await brewsApi.addBrewForUser(user!, values);
+                        await brewsApi.addBrewForUser(
+                            user,
+                            BrewSchema.cast(values)
+                        );
+                        await new Promise((resolve) =>
+                            setTimeout(resolve, 2000)
+                        );
                         resetBrewInput();
                     } catch (err) {
                         const message =
@@ -188,6 +193,17 @@ const BrewInput = ({ user }: Props) => {
                                                     }
                                                     onChange={field.onChange}
                                                 />
+                                                <FormCheck
+                                                    inline
+                                                    type="radio"
+                                                    label="Good"
+                                                    name="tasteOverall"
+                                                    value="good"
+                                                    checked={
+                                                        field.value === "good"
+                                                    }
+                                                    onChange={field.onChange}
+                                                />
                                             </div>
                                         )}
                                     </Field>
@@ -200,6 +216,12 @@ const BrewInput = ({ user }: Props) => {
                             </fieldset>
                             <Button type="submit">Add Brew</Button>
                         </fieldset>
+                        {errorMessage && (
+                            <Alert variant="danger" role="alert">
+                                <strong>Error adding brew: </strong>
+                                {String(errorMessage)}
+                            </Alert>
+                        )}
                     </Form>
                 )}
             </Formik>
