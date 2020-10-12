@@ -280,7 +280,7 @@ The intent with the new version is to follow the guiding principles:
 - The app should be very quick to change.
 - The data model needs to be easy to evolve (without losing previous data).
 
-# 2010-10-11
+# 2020-10-11
 
 Already stuck with indecision in the refactor. Rediscovered [5] from the Zen of Python:
 
@@ -289,3 +289,14 @@ Flat is better than nested.
 ```
 
 Must `import this` more often.
+
+# 2020-10-12
+
+And then stuck on the question of how to handle state. Particularly, how to break the
+direct connection to the API (and so handle caching, for example). As ever, I've fallen
+into the trap of forgetting the basics. [This video](https://www.youtube.com/watch?v=o8THlN8hgcw)
+a needed reminder that architecture still needed on the frontend.
+
+I still need the Application Layer to handle those. Redux was a framework, but having
+removed that I still need a separation of the direct API calls from the Presentation
+Layer.

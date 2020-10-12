@@ -38,6 +38,10 @@ https://www.youtube.com/watch?v=HaEPXoXVf2k
 
 # Frontend
 
+## Architecture
+
+https://www.youtube.com/watch?v=o8THlN8hgcw
+
 ## React
 
 https://reactjs.org/docs/react-component.html

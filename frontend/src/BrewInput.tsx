@@ -10,10 +10,8 @@ import FormControl from "react-bootstrap/FormControl";
 import ToggleButton from "react-bootstrap/ToggleButton";
 import ToggleButtonGroup from "react-bootstrap/ToggleButtonGroup";
 
-import { BrewsFromDynamoDb } from "api";
-import { User, BrewSchema, Brew } from "models";
-
-const brewsApi = new BrewsFromDynamoDb();
+import { BrewsStore } from "core";
+import { BrewSchema, Brew } from "models";
 
 interface BrewFieldProps {
     id: keyof Brew;
@@ -42,16 +40,21 @@ const BrewField = ({ id, label, formik }: BrewFieldProps) => {
 };
 
 interface Props {
-    user: User;
+    brewsStore: BrewsStore;
 }
 
-const BrewInput = ({ user }: Props) => {
-    const [initialValues, setInitialValues] = useState<Brew>(_createNewBrew());
+const BrewInput = ({ brewsStore }: Props) => {
+    const createInitialValues = () =>
+        _createNewBrew(brewsStore.getLatestBrew());
+
+    const [initialValues, setInitialValues] = useState<Brew>(
+        createInitialValues()
+    );
     const [errorMessage, setErrorMessage] = useState(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const resetBrewInput = () => {
-        setInitialValues(_createNewBrew());
+        setInitialValues(createInitialValues());
     };
 
     return (
@@ -62,10 +65,7 @@ const BrewInput = ({ user }: Props) => {
                 onSubmit={async (values) => {
                     try {
                         setIsSubmitting(true);
-                        await brewsApi.addBrewForUser(
-                            user,
-                            BrewSchema.cast(values)
-                        );
+                        await brewsStore.addBrew(BrewSchema.cast(values));
                         resetBrewInput();
                     } catch (err) {
                         const message =
@@ -209,8 +209,23 @@ const BrewInput = ({ user }: Props) => {
     );
 };
 
-const _createNewBrew = (): Brew => {
+const _createNewBrew = (modelBrew: Brew | null): Brew => {
+    const prototypeBrew = modelBrew
+        ? {
+              beanName: modelBrew.beanName,
+              beanProducer: modelBrew.beanProducer,
+              beanRegion: modelBrew.beanRegion,
+              beanVariety: modelBrew.beanVariety,
+              beanProcess: modelBrew.beanProcess,
+              beanRoaster: modelBrew.beanRoaster,
+              beanRoastDate: modelBrew.beanRoastDate,
+              grinderType: modelBrew.grinderType,
+              grinderSetting: modelBrew.grinderSetting,
+          }
+        : {};
+
     return BrewSchema.cast({
+        ...prototypeBrew,
         id: uuidv4(),
         version: "0.0.1",
         timestamp: new Date().toISOString(),
