@@ -7,7 +7,8 @@ import Form from "react-bootstrap/Form";
 import FormGroup from "react-bootstrap/FormGroup";
 import FormLabel from "react-bootstrap/FormLabel";
 import FormControl from "react-bootstrap/FormControl";
-import FormCheck from "react-bootstrap/FormCheck";
+import ToggleButton from "react-bootstrap/ToggleButton";
+import ToggleButtonGroup from "react-bootstrap/ToggleButtonGroup";
 
 import { BrewsFromDynamoDb } from "api";
 import { User, BrewSchema, Brew } from "models";
@@ -64,9 +65,6 @@ const BrewInput = ({ user }: Props) => {
                         await brewsApi.addBrewForUser(
                             user,
                             BrewSchema.cast(values)
-                        );
-                        await new Promise((resolve) =>
-                            setTimeout(resolve, 2000)
                         );
                         resetBrewInput();
                     } catch (err) {
@@ -164,54 +162,36 @@ const BrewInput = ({ user }: Props) => {
                                     <FormLabel>Overall</FormLabel>
                                     <Field name="tasteOverall">
                                         {({ field }: FieldProps) => (
-                                            <div
-                                                className={
-                                                    formik.errors.tasteOverall
-                                                        ? "is-invalid"
-                                                        : ""
-                                                }
+                                            <ToggleButtonGroup
+                                                type="radio"
+                                                name={field.name}
+                                                value={field.value}
+                                                onChange={(value, event) => {
+                                                    field.onChange(event);
+                                                }}
+                                                style={{ width: "100%" }}
                                             >
-                                                <FormCheck
-                                                    inline
-                                                    type="radio"
-                                                    label="Bad"
-                                                    name="tasteOverall"
+                                                <ToggleButton
                                                     value="bad"
-                                                    checked={
-                                                        field.value === "bad"
-                                                    }
-                                                    onChange={field.onChange}
-                                                />
-                                                <FormCheck
-                                                    inline
-                                                    type="radio"
-                                                    label="OK"
-                                                    name="tasteOverall"
+                                                    variant="secondary"
+                                                >
+                                                    Bad
+                                                </ToggleButton>
+                                                <ToggleButton
                                                     value="ok"
-                                                    checked={
-                                                        field.value === "ok"
-                                                    }
-                                                    onChange={field.onChange}
-                                                />
-                                                <FormCheck
-                                                    inline
-                                                    type="radio"
-                                                    label="Good"
-                                                    name="tasteOverall"
+                                                    variant="secondary"
+                                                >
+                                                    OK
+                                                </ToggleButton>
+                                                <ToggleButton
                                                     value="good"
-                                                    checked={
-                                                        field.value === "good"
-                                                    }
-                                                    onChange={field.onChange}
-                                                />
-                                            </div>
+                                                    variant="secondary"
+                                                >
+                                                    Good
+                                                </ToggleButton>
+                                            </ToggleButtonGroup>
                                         )}
                                     </Field>
-                                    {formik.errors.tasteOverall && (
-                                        <FormControl.Feedback type="invalid">
-                                            You must select a value.
-                                        </FormControl.Feedback>
-                                    )}
                                 </FormGroup>
                             </fieldset>
                             <Button type="submit">Add Brew</Button>
