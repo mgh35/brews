@@ -4,28 +4,42 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 
-type OnRecordSignature = {
-    brewTotalTime?: number;
-};
+import { BrewTrace, Recipe } from "models/brew";
 
 type Props = {
-    onRecord?: (record: OnRecordSignature) => void;
+    recipe?: Recipe;
+    onRecord?: (record: BrewTrace) => void;
 };
 
-const BrewTimer = ({ onRecord }: Props) => {
+const BrewTimer = ({ recipe, onRecord }: Props) => {
     const [time, setTime] = useState<number | undefined>(undefined);
     const [isRunning, setIsRunning] = useState(false);
     const [hasStarted, setHasStarted] = useState(false);
     const [startTime, setStartTime] = useState<number | undefined>(undefined);
+    const [stageTimes, setStageTimes] = useState<{ [key: number]: number }>({});
+
+    const recordBrewTrace = () => {
+        if (!onRecord) {
+            return;
+        }
+        const brewStages =
+            recipe && recipe.recipeStages
+                ? recipe.recipeStages.map((_, i) => ({
+                      name: undefined,
+                      waterMass: undefined,
+                      time: stageTimes[i],
+                  }))
+                : [];
+        onRecord({
+            brewTotalTime: _elapsedTimeSince(startTime),
+            brewStages,
+        });
+    };
 
     const toggleRunning = () => {
         if (isRunning) {
             setIsRunning(false);
-            if (onRecord) {
-                onRecord({
-                    brewTotalTime: _elapsedTimeSince(startTime),
-                });
-            }
+            recordBrewTrace();
         } else {
             setStartTime(Date.now());
             setIsRunning(true);
@@ -38,11 +52,8 @@ const BrewTimer = ({ onRecord }: Props) => {
         setHasStarted(false);
         setStartTime(undefined);
         setTime(undefined);
-        if (onRecord) {
-            onRecord({
-                brewTotalTime: undefined,
-            });
-        }
+        setStageTimes({});
+        recordBrewTrace();
     };
 
     useEffect(() => {
@@ -60,10 +71,11 @@ const BrewTimer = ({ onRecord }: Props) => {
         <>
             <Container>
                 <Row>
-                    <Col>
+                    <Col xs="1">
                         <div title="clock">{_displayTime(time)}</div>
                     </Col>
-                    <Col>
+                    <Col xs="6"></Col>
+                    <Col xs="2">
                         <Button
                             title="toggle"
                             variant="secondary"
@@ -84,6 +96,58 @@ const BrewTimer = ({ onRecord }: Props) => {
                         )}
                     </Col>
                 </Row>
+                {recipe && recipe.recipeStages && (
+                    <Row>
+                        <Col xs="1"></Col>
+                        <Col xs="3">
+                            <strong>Name</strong>
+                        </Col>
+                        <Col xs="1">
+                            <strong>Mass</strong>
+                        </Col>
+                        <Col xs="1">
+                            <strong>Target</strong>
+                        </Col>
+                        <Col xs="1">
+                            <strong>Time</strong>
+                        </Col>
+                    </Row>
+                )}
+                {recipe &&
+                    recipe.recipeStages &&
+                    recipe.recipeStages.map((stage, i) => (
+                        <Row key={`stage_${i}`}>
+                            <Col xs="1"></Col>
+                            <Col xs="3">{stage.name}</Col>
+                            <Col xs="1">
+                                {stage.waterMass
+                                    ? `${Math.floor(stage.waterMass)}g`
+                                    : ""}
+                            </Col>
+                            <Col xs="1">{_displayTime(stage.time)}</Col>
+                            <Col xs="1">{_displayTime(stageTimes[i])}</Col>
+                            <Col xs="1">
+                                <Button
+                                    variant="outline-secondary"
+                                    title={`stage_${i}`}
+                                    disabled={
+                                        !startTime || Boolean(stageTimes[i])
+                                    }
+                                    onClick={() => {
+                                        if (!startTime) {
+                                            return;
+                                        }
+                                        setStageTimes({
+                                            ...stageTimes,
+                                            [i]: _elapsedTimeSince(startTime),
+                                        });
+                                    }}
+                                >
+                                    Reached
+                                </Button>
+                            </Col>
+                        </Row>
+                    ))}
             </Container>
         </>
     );

@@ -16,32 +16,33 @@ function App() {
     useEffect(() => {
         (async () => {
             try {
-                setLoadingMessage("getting the user");
+                setLoadingMessage("finding out who you are");
                 const user: User = await Auth.currentUserInfo();
-                setLoadingMessage(`fetching the ${user.username}'s brews`);
+                setLoadingMessage("fetching your brews");
                 const brewsStore = new BrewsStore(user);
                 await brewsStore.refresh();
                 setBrewsStore(brewsStore);
-                setLoadingMessage("");
             } catch (e) {
                 setErrorMessage(String(e));
+            } finally {
+                setLoadingMessage("");
             }
         })();
     }, [setBrewsStore, setErrorMessage, setLoadingMessage]);
 
-    if (loadingMessage) {
-        return (
-            <Alert variant="primary">
-                <Spinner animation="grow" variant="primary" /> Loading app ...{" "}
-                {loadingMessage}
-            </Alert>
-        );
-    } else if (errorMessage) {
+    if (errorMessage) {
         return (
             <Alert variant="danger">
                 Failed to load Brews!
                 <hr />
                 {errorMessage}
+            </Alert>
+        );
+    } else if (loadingMessage) {
+        return (
+            <Alert variant="primary">
+                <Spinner animation="grow" variant="primary" /> Loading app ...{" "}
+                {loadingMessage}
             </Alert>
         );
     } else if (!brewsStore) {

@@ -23,28 +23,38 @@ export const GrindSchema = yup
 
 export type Grind = yup.InferType<typeof GrindSchema>;
 
+export enum BrewMethod {
+    V60 = "V60",
+}
+
+export const BrewStageSchema = yup.object({
+    name: yup.string().ensure(),
+    time: yup.number(),
+    waterMass: yup.number(),
+});
+
+export type BrewStage = yup.InferType<typeof BrewStageSchema>;
+
+export const RecipeSchema = yup
+    .object({
+        recipeName: yup.string().ensure(),
+        recipeMethod: yup.mixed().oneOf(["V60"]),
+        recipeCoffeeMass: yup.number().positive(),
+        recipeWaterMass: yup.number().positive(),
+        recipeStages: yup.array(BrewStageSchema.required()),
+    })
+    .required();
+
+export type Recipe = yup.InferType<typeof RecipeSchema>;
+
 export const BrewTraceSchema = yup
     .object({
         brewCoffeeMass: yup.number().positive(),
         brewWaterMass: yup.number().positive(),
         brewTotalTime: yup.number().positive(),
+        brewStages: yup.array(BrewStageSchema.required()),
     })
     .required();
-
-export const RecipeSchema = yup
-    .object({
-        recipeName: yup.string().ensure(),
-        recipeMethod: yup
-            .string()
-            .ensure()
-            .matches(/^(V60|)$/),
-        recipeCoffeeMass: yup.number().positive(),
-        recipeWaterMass: yup.number().positive(),
-        recipeStages: yup.array(),
-    })
-    .required();
-
-export type Recipe = yup.InferType<typeof RecipeSchema>;
 
 export type BrewTrace = yup.InferType<typeof BrewTraceSchema>;
 
@@ -67,6 +77,7 @@ export const BrewSchema = yup
     })
     .shape(BeanSchema.fields)
     .shape(GrindSchema.fields)
+    .shape(RecipeSchema.fields)
     .shape(BrewTraceSchema.fields)
     .shape(TasteSchema.fields)
     .required();

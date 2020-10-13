@@ -19,6 +19,7 @@ import ToggleButtonGroup from "react-bootstrap/ToggleButtonGroup";
 import { BrewsStore } from "application/brewsStore";
 import { BrewSchema, Brew } from "models/brew";
 import BrewTimer from "components/BrewTimer";
+import { RecipeStore } from "application/recipeStore";
 
 interface Props {
     brewsStore: BrewsStore;
@@ -123,10 +124,15 @@ const BrewInput = ({ brewsStore }: Props) => {
                                     />
                                     <BrewTimer
                                         key={`brewTimer_${versionKey}`}
+                                        recipe={formik.values}
                                         onRecord={(trace) => {
                                             formik.setFieldValue(
                                                 "brewTotalTime",
                                                 trace.brewTotalTime
+                                            );
+                                            formik.setFieldValue(
+                                                "brewStages",
+                                                trace.brewStages
                                             );
                                         }}
                                     />
@@ -169,7 +175,20 @@ const BrewInput = ({ brewsStore }: Props) => {
                                         </Field>
                                     </FormGroup>
                                 </fieldset>
-                                <Button type="submit">Add Brew</Button>
+                                <Button
+                                    type="submit"
+                                    disabled={
+                                        Object.keys(formik.errors).length > 0
+                                    }
+                                >
+                                    Add Brew
+                                </Button>
+                                {Object.keys(formik.errors).length > 0 && (
+                                    <Alert variant="warning">
+                                        <strong>Validation Errors: </strong>
+                                        {JSON.stringify(formik.errors)}
+                                    </Alert>
+                                )}
                             </fieldset>
                             {errorMessage && (
                                 <Alert variant="danger" role="alert">
@@ -226,11 +245,14 @@ const _createNewBrew = (modelBrew: Brew | null): Brew => {
           }
         : {};
 
+    const recipe = new RecipeStore().getV60Recipe();
+
     return BrewSchema.cast({
-        ...prototypeBrew,
         id: uuidv4(),
         version: "0.0.1",
         timestamp: new Date().toISOString(),
+        ...recipe,
+        ...prototypeBrew,
     });
 };
 
