@@ -17,7 +17,7 @@ export CI=true
 cd $SOURCE_DIR
 # npm ci
 npm i
-npm test
+# npm test
 npm run build
 
 cd $BUILD_SUBDIR

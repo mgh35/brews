@@ -1,8 +1,6 @@
 import { BrewMethod, Recipe } from "models/brew";
 
 export class RecipeStore {
-    constructor() {}
-
     getV60Recipe(): Recipe {
         return {
             recipeName: "James Hoffmann Ultimate V60 Technique",
