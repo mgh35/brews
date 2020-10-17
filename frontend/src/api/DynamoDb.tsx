@@ -6,54 +6,58 @@ import config from "config";
 import { Brew } from "models/brew";
 import { User } from "models/user";
 
-export class BrewsFromDynamoDb {
-    fetchBrewsForUser(user: User) {
+type DbItem = any;
+
+abstract class DynamoDbApi<T> {
+    fetchForUser(user: User): Promise<Array<T>> {
         return this._authed_db().then((db) =>
             db
                 .query({
                     TableName: "Brews",
-                    KeyConditionExpression: "pk = :pk",
+                    KeyConditionExpression:
+                        "pk = :pk and begins_with(sk, :sk_prefix)",
                     ExpressionAttributeValues: {
                         ":pk": user.id,
+                        ":sk_prefix": this._getSecondaryKeyPrefix(),
                     },
                 })
                 .promise()
                 .then((response) => {
                     return response.Items
-                        ? response.Items.map(this._makeBrewFromItem)
+                        ? response.Items.map(this._makeObjectFromDbItem)
                         : [];
                 })
         );
     }
 
-    addBrewForUser(user: User, brew: Brew) {
+    saveForUser(user: User, toSave: T) {
         return this._authed_db().then((db) =>
             db
                 .put({
                     TableName: "Brews",
-                    Item: this._makeItemFromBrew(user, brew),
+                    Item: this._makeDbItemFromObject(user, toSave),
                 })
                 .promise()
-                .then(() => true)
+                .then(() => toSave)
         );
     }
 
-    deleteBrewForUser(user: User, brew: Brew) {
+    deleteForUser(user: User, toDelete: T) {
         return this._authed_db().then((db) =>
             db
                 .delete({
                     TableName: "Brews",
                     Key: {
                         pk: user.id,
-                        sk: this._makeBrewKey(brew),
+                        sk: this._makeSecondaryKey(toDelete),
                     },
                 })
                 .promise()
-                .then(() => brew)
+                .then(() => toDelete)
         );
     }
 
-    _authed_db(): Promise<DynamoDB.DocumentClient> {
+    private _authed_db(): Promise<DynamoDB.DocumentClient> {
         const params = config.DYNAMODB_CONFIG;
         if (params.is_local) {
             return Promise.resolve(new DynamoDB.DocumentClient(params));
@@ -63,19 +67,33 @@ export class BrewsFromDynamoDb {
         );
     }
 
-    _makeItemFromBrew(user: User, brew: Brew): any {
+    protected abstract _makeDbItemFromObject(user: User, object: T): DbItem;
+
+    protected abstract _makeObjectFromDbItem(item: DbItem): T;
+
+    protected abstract _getSecondaryKeyPrefix(): string;
+
+    protected abstract _makeSecondaryKey(object: T): string;
+}
+
+export class BrewsFromDynamoDb extends DynamoDbApi<Brew> {
+    _makeDbItemFromObject(user: User, brew: Brew): any {
         return {
             pk: user.id,
-            sk: this._makeBrewKey(brew),
+            sk: this._makeSecondaryKey(brew),
             ...brew,
         };
     }
 
-    _makeBrewKey(brew: Brew): string {
-        return `Brew#${brew.id}`;
+    _makeObjectFromDbItem(item: DbItem): Brew {
+        return item;
     }
 
-    _makeBrewFromItem(item: any): Brew {
-        return item;
+    _getSecondaryKeyPrefix(): string {
+        return "Brew#";
+    }
+
+    _makeSecondaryKey(brew: Brew): string {
+        return `${this._getSecondaryKeyPrefix()}${brew.id}`;
     }
 }

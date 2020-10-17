@@ -15,7 +15,9 @@ popd
 if [ "$ENV" = "production" ]; then
     ./deploy-production.sh
 elif [ "$ENV" = "development" ]; then
-    docker run -d -p 8000:8000 amazon/dynamodb-local
+    if [ -z "$(aws dynamodb list-tables --endpoint-url http://localhost:8000 --output json)" ]; then
+        docker run -d -p 8000:8000 amazon/dynamodb-local
+    fi
 
     printf "Waiting for dynamodb to start "
     while [ -z "$(aws dynamodb list-tables --endpoint-url http://localhost:8000 --output json)" ]; do

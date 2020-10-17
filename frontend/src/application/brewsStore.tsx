@@ -1,6 +1,6 @@
 import { Brew } from "models/brew";
 import { User } from "models/user";
-import { BrewsFromDynamoDb } from "api/brewsFromDynamoDb";
+import { BrewsFromDynamoDb } from "api/DynamoDb";
 
 export class BrewsStore {
     private user: User;
@@ -14,14 +14,14 @@ export class BrewsStore {
     }
 
     async refresh() {
-        const brews = await this.brewsApi.fetchBrewsForUser(this.user);
+        const brews = await this.brewsApi.fetchForUser(this.user);
         for (const brew of brews) {
             this.brewsById[brew.id] = brew;
         }
     }
 
     async addBrew(brew: Brew) {
-        await this.brewsApi.addBrewForUser(this.user, brew);
+        await this.brewsApi.saveForUser(this.user, brew);
         this.brewsById[brew.id] = this._cloneBrew(brew);
     }
 
