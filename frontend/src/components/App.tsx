@@ -6,12 +6,12 @@ import Spinner from "react-bootstrap/Spinner";
 
 import { User } from "models/user";
 import BrewInput from "components/BrewInput";
-import { BrewsStore } from "application/brewsStore";
+import { BrewStore } from "application/brewStore";
 
 function App() {
     const [loadingMessage, setLoadingMessage] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
-    const [brewsStore, setBrewsStore] = useState<BrewsStore | null>(null);
+    const [brewStore, setBrewStore] = useState<BrewStore | null>(null);
 
     useEffect(() => {
         (async () => {
@@ -19,16 +19,16 @@ function App() {
                 setLoadingMessage("finding out who you are");
                 const user: User = await Auth.currentUserInfo();
                 setLoadingMessage("fetching your brews");
-                const brewsStore = new BrewsStore(user);
+                const brewsStore = new BrewStore(user);
                 await brewsStore.refresh();
-                setBrewsStore(brewsStore);
+                setBrewStore(brewsStore);
             } catch (e) {
                 setErrorMessage(String(e));
             } finally {
                 setLoadingMessage("");
             }
         })();
-    }, [setBrewsStore, setErrorMessage, setLoadingMessage]);
+    }, [setBrewStore, setErrorMessage, setLoadingMessage]);
 
     if (errorMessage) {
         return (
@@ -45,14 +45,14 @@ function App() {
                 {loadingMessage}
             </Alert>
         );
-    } else if (!brewsStore) {
+    } else if (!brewStore) {
         return (
             <Alert variant="danger">
                 Oops, something's gone wrong! I am quite confused.
             </Alert>
         );
     }
-    return <BrewInput brewsStore={brewsStore} />;
+    return <BrewInput brewStore={brewStore} />;
 }
 
 export default withAuthenticator(App);

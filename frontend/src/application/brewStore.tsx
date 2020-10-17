@@ -2,7 +2,7 @@ import { Brew } from "models/brew";
 import { User } from "models/user";
 import { BrewsFromDynamoDb } from "api/DynamoDb";
 
-export class BrewsStore {
+export class BrewStore {
     private user: User;
     private brewsApi: BrewsFromDynamoDb;
     private brewsById: { [key: string]: Brew };

@@ -16,18 +16,17 @@ import FormControl from "react-bootstrap/FormControl";
 import ToggleButton from "react-bootstrap/ToggleButton";
 import ToggleButtonGroup from "react-bootstrap/ToggleButtonGroup";
 
-import { BrewsStore } from "application/brewsStore";
+import { BrewStore } from "application/brewStore";
 import { BrewSchema, Brew } from "models/brew";
 import BrewTimer from "components/BrewTimer";
 import { RecipeStore } from "application/recipeStore";
 
 interface Props {
-    brewsStore: BrewsStore;
+    brewStore: BrewStore;
 }
 
-const BrewInput = ({ brewsStore }: Props) => {
-    const createInitialValues = () =>
-        _createNewBrew(brewsStore.getLatestBrew());
+const BrewInput = ({ brewStore }: Props) => {
+    const createInitialValues = () => _createNewBrew(brewStore.getLatestBrew());
 
     const [initialValues, setInitialValues] = useState<Brew>(
         createInitialValues()
@@ -49,7 +48,7 @@ const BrewInput = ({ brewsStore }: Props) => {
                 onSubmit={async (values) => {
                     try {
                         setIsSubmitting(true);
-                        await brewsStore.addBrew(BrewSchema.cast(values));
+                        await brewStore.addBrew(BrewSchema.cast(values));
                         resetBrewInput();
                     } catch (err) {
                         const message =
