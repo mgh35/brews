@@ -3,7 +3,7 @@ import DynamoDB from "aws-sdk/clients/dynamodb";
 
 import config from "config";
 
-import { Brew } from "models/brew";
+import { Brew, Bean } from "models/brew";
 import { User } from "models/user";
 
 type DbItem = any;
@@ -95,5 +95,27 @@ export class BrewsFromDynamoDb extends DynamoDbApi<Brew> {
 
     _makeSecondaryKey(brew: Brew): string {
         return `${this._getSecondaryKeyPrefix()}${brew.id}`;
+    }
+}
+
+export class BeansFromDynamoDb extends DynamoDbApi<Bean> {
+    _makeDbItemFromObject(user: User, brew: Brew): any {
+        return {
+            pk: user.id,
+            sk: this._makeSecondaryKey(brew),
+            ...brew,
+        };
+    }
+
+    _makeObjectFromDbItem(item: DbItem): Brew {
+        return item;
+    }
+
+    _getSecondaryKeyPrefix(): string {
+        return "Bean#";
+    }
+
+    _makeSecondaryKey(bean: Bean): string {
+        return `${this._getSecondaryKeyPrefix()}${bean.beanId}`;
     }
 }

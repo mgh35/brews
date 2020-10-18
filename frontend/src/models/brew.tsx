@@ -2,6 +2,8 @@ import * as yup from "yup";
 
 export const BeanSchema = yup
     .object({
+        beanId: yup.string().ensure(),
+        beanVersion: yup.string().ensure(),
         beanName: yup.string().ensure(),
         beanProducer: yup.string().ensure(),
         beanRegion: yup.string().ensure(),

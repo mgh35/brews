@@ -16,16 +16,19 @@ import FormControl from "react-bootstrap/FormControl";
 import ToggleButton from "react-bootstrap/ToggleButton";
 import ToggleButtonGroup from "react-bootstrap/ToggleButtonGroup";
 
+import { BeanStore } from "application/beanStore";
 import { BrewStore } from "application/brewStore";
-import { BrewSchema, Brew } from "models/brew";
-import BrewTimer from "components/BrewTimer";
 import { RecipeStore } from "application/recipeStore";
+import BeanChooser from "components/BeanChooser";
+import BrewTimer from "components/BrewTimer";
+import { BrewSchema, Brew } from "models/brew";
 
 interface Props {
     brewStore: BrewStore;
+    beanStore: BeanStore;
 }
 
-const BrewInput = ({ brewStore }: Props) => {
+const BrewInput = ({ brewStore, beanStore }: Props) => {
     const createInitialValues = () => _createNewBrew(brewStore.getLatestBrew());
 
     const [initialValues, setInitialValues] = useState<Brew>(
@@ -73,27 +76,18 @@ const BrewInput = ({ brewStore }: Props) => {
                             <fieldset disabled={isSubmitting}>
                                 <fieldset>
                                     <legend>Bean</legend>
-                                    <BrewField id="beanName" label="Name" />
-                                    <BrewField
-                                        id="beanProducer"
-                                        label="Producer"
-                                    />
-                                    <BrewField id="beanRegion" label="Region" />
-                                    <BrewField
-                                        id="beanVariety"
-                                        label="Variety"
-                                    />
-                                    <BrewField
-                                        id="beanProcess"
-                                        label="Process"
-                                    />
-                                    <BrewField
-                                        id="beanRoaster"
-                                        label="Roaster"
-                                    />
-                                    <BrewField
-                                        id="beanRoastDate"
-                                        label="Roast Date"
+                                    <BeanChooser
+                                        value={formik.values.beanId}
+                                        beanStore={beanStore}
+                                        onSelect={(beanId) => {
+                                            const bean = beanStore.getById(
+                                                beanId
+                                            );
+                                            formik.setValues({
+                                                ...formik.values,
+                                                ...bean,
+                                            });
+                                        }}
                                     />
                                 </fieldset>
                                 <fieldset>

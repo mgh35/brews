@@ -6,12 +6,18 @@ import Spinner from "react-bootstrap/Spinner";
 
 import { User } from "models/user";
 import BrewInput from "components/BrewInput";
+import { BeanStore } from "application/beanStore";
 import { BrewStore } from "application/brewStore";
 
 function App() {
     const [loadingMessage, setLoadingMessage] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
-    const [brewStore, setBrewStore] = useState<BrewStore | null>(null);
+    const [brewStore, setBrewStore] = useState<BrewStore | undefined>(
+        undefined
+    );
+    const [beanStore, setBeanStore] = useState<BeanStore | undefined>(
+        undefined
+    );
 
     useEffect(() => {
         (async () => {
@@ -19,9 +25,11 @@ function App() {
                 setLoadingMessage("finding out who you are");
                 const user: User = await Auth.currentUserInfo();
                 setLoadingMessage("fetching your brews");
-                const brewsStore = new BrewStore(user);
-                await brewsStore.refresh();
-                setBrewStore(brewsStore);
+                const brewStore = new BrewStore(user);
+                const beanStore = new BeanStore(user);
+                await Promise.all([brewStore.refresh(), beanStore.refresh()]);
+                setBrewStore(brewStore);
+                setBeanStore(beanStore);
             } catch (e) {
                 setErrorMessage(String(e));
             } finally {
@@ -45,14 +53,14 @@ function App() {
                 {loadingMessage}
             </Alert>
         );
-    } else if (!brewStore) {
+    } else if (!brewStore || !beanStore) {
         return (
             <Alert variant="danger">
                 Oops, something's gone wrong! I am quite confused.
             </Alert>
         );
     }
-    return <BrewInput brewStore={brewStore} />;
+    return <BrewInput brewStore={brewStore} beanStore={beanStore} />;
 }
 
 export default withAuthenticator(App);
