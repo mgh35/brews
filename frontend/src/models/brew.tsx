@@ -66,6 +66,14 @@ export const TasteSchema = yup
             .string()
             .ensure()
             .matches(/^(bad|ok|good|)$/),
+        tasteSweetness: yup.boolean(),
+        tasteSourness: yup.boolean(),
+        tasteBitterness: yup.boolean(),
+        tasteBody: yup
+            .string()
+            .ensure()
+            .matches(/^(light|medium|heavy|)$/),
+        tasteAromas: yup.array().of(yup.string().ensure()),
     })
     .required();
 

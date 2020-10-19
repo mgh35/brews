@@ -2,16 +2,17 @@
 
 ## AWS Setup
 
-Brews is set up to run on AWS. 
+Brews is set up to run on AWS.
 
 First thing is to set up an appropriate environment. I am currently following:
 
-* Through the AWS Console, create a new account in which this will be run.
-* Through the AWS Console, create an IAM under this account with API access only and
-    the appropriate permissions.
-* Through the AWS Console, create an S3 bucket `brews-terraform-state` (to act as the
-    Terraform backend). Set this to have public access, but with the policy below. Turn
-    on versioning.
+- Through the AWS Console, create a new account in which this will be run.
+- Through the AWS Console, create an IAM under this account with API access only and
+  the appropriate permissions.
+- Through the AWS Console, create an S3 bucket `brews-terraform-state` (to act as the
+  Terraform backend). Set this to have public access, but with the policy below. Turn
+  on versioning.
+
 ```
 {
     "Version": "2012-10-17",
@@ -38,9 +39,10 @@ First thing is to set up an appropriate environment. I am currently following:
     ]
 }
 ```
-* In the local terminal, configured perms through `aws configure`.
-* For the development environment, create a separate profile called `development`
-    * Can have anything as the Access Key ID and Secret Access Key, but has to have something
+
+- In the local terminal, configured perms through `aws configure`.
+- For the development environment, create a separate profile called `development`
+  - Can have anything as the Access Key ID and Secret Access Key, but has to have something
 
 ## Deploy
 

@@ -22,6 +22,7 @@ import { RecipeStore } from "application/recipeStore";
 import BeanChooser from "components/BeanChooser";
 import BrewTimer from "components/BrewTimer";
 import { BrewSchema, Brew } from "models/brew";
+import styles from "./BrewInput.module.css";
 
 interface Props {
     brewStore: BrewStore;
@@ -44,7 +45,7 @@ const BrewInput = ({ brewStore, beanStore }: Props) => {
     };
 
     return (
-        <>
+        <div className={styles.BrewInput}>
             <Formik
                 initialValues={initialValues}
                 enableReinitialize={true}
@@ -129,35 +130,86 @@ const BrewInput = ({ brewStore, beanStore }: Props) => {
                                 <fieldset>
                                     <legend>Taste</legend>
                                     <FormGroup controlId="tasteOverall">
-                                        <FormLabel>Overall</FormLabel>
                                         <Field name="tasteOverall">
                                             {({ field }: FieldProps) => (
                                                 <ToggleButtonGroup
                                                     type="radio"
                                                     name={field.name}
+                                                    className={
+                                                        styles.toggleGroup
+                                                    }
                                                     value={field.value}
                                                     onChange={(_, event) => {
                                                         field.onChange(event);
                                                     }}
-                                                    style={{ width: "100%" }}
                                                 >
                                                     <ToggleButton
                                                         value="bad"
-                                                        variant="secondary"
+                                                        variant="outline-secondary"
                                                     >
                                                         Bad
                                                     </ToggleButton>
                                                     <ToggleButton
                                                         value="ok"
-                                                        variant="secondary"
+                                                        variant="outline-secondary"
                                                     >
                                                         OK
                                                     </ToggleButton>
                                                     <ToggleButton
                                                         value="good"
-                                                        variant="secondary"
+                                                        variant="outline-secondary"
                                                     >
                                                         Good
+                                                    </ToggleButton>
+                                                </ToggleButtonGroup>
+                                            )}
+                                        </Field>
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <BrewToggleButton
+                                            id="tasteSweetness"
+                                            label="Sweet"
+                                        />
+                                        <BrewToggleButton
+                                            id="tasteSourness"
+                                            label="Sour"
+                                        />
+                                        <BrewToggleButton
+                                            id="tasteBitterness"
+                                            label="Bitter"
+                                        />
+                                    </FormGroup>
+                                    <FormGroup controlId="tasteBody">
+                                        <Field name="tasteBody">
+                                            {({ field }: FieldProps) => (
+                                                <ToggleButtonGroup
+                                                    type="radio"
+                                                    name={field.name}
+                                                    className={
+                                                        styles.toggleGroup
+                                                    }
+                                                    value={field.value}
+                                                    onChange={(_, event) => {
+                                                        field.onChange(event);
+                                                    }}
+                                                >
+                                                    <ToggleButton
+                                                        value="light"
+                                                        variant="outline-secondary"
+                                                    >
+                                                        Light-Body
+                                                    </ToggleButton>
+                                                    <ToggleButton
+                                                        value="medium"
+                                                        variant="outline-secondary"
+                                                    >
+                                                        Medium-Body
+                                                    </ToggleButton>
+                                                    <ToggleButton
+                                                        value="heavy"
+                                                        variant="outline-secondary"
+                                                    >
+                                                        Heavy-Body
                                                     </ToggleButton>
                                                 </ToggleButtonGroup>
                                             )}
@@ -166,6 +218,7 @@ const BrewInput = ({ brewStore, beanStore }: Props) => {
                                 </fieldset>
                                 <Button
                                     type="submit"
+                                    className={styles.submitButton}
                                     disabled={
                                         Object.keys(formik.errors).length > 0
                                     }
@@ -189,7 +242,7 @@ const BrewInput = ({ brewStore, beanStore }: Props) => {
                     );
                 }}
             </Formik>
-        </>
+        </div>
     );
 };
 
@@ -216,6 +269,25 @@ const BrewField = ({ id, label }: BrewFieldProps) => {
                 </FormControl.Feedback>
             )}
         </FormGroup>
+    );
+};
+
+interface BrewToggleButtonProps {
+    id: keyof Brew;
+    label: string;
+}
+
+const BrewToggleButton = ({ id, label }: BrewToggleButtonProps) => {
+    const { values, setFieldValue }: FormikProps<Brew> = useFormikContext();
+    return (
+        <Button
+            className={styles.toggleButton}
+            variant="outline-secondary"
+            active={values[id]}
+            onClick={() => setFieldValue(id, !values[id])}
+        >
+            {label}
+        </Button>
     );
 };
 
