@@ -9,13 +9,10 @@ export class RecipeStore {
             recipeWaterMass: 250,
             recipeStages: [
                 { name: "Wet the grounds", time: 0, waterMass: 0 },
-                { name: "Bloom", time: undefined, waterMass: 45 },
-                { name: "60% Pour (start)", time: 45, waterMass: 45 },
-                { name: "60% Pour (checkpoint)", time: 60, waterMass: 100 },
-                { name: "Final Pour (start)", time: 75, waterMass: 150 },
-                { name: "Final Pour (checkpoint)", time: 90, waterMass: 200 },
+                { name: "Bloom", time: 5, waterMass: 45 },
+                { name: "60% Pour", time: 45, waterMass: 45 },
+                { name: "Final Pour", time: 75, waterMass: 150 },
                 { name: "Drain", time: 105, waterMass: 250 },
-                { name: "Finished", time: undefined, waterMass: 250 },
             ],
         };
     }

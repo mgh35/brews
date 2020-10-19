@@ -107,14 +107,6 @@ const BrewInput = ({ brewStore, beanStore }: Props) => {
                                         id="brewCoffeeMass"
                                         label="Coffee Mass (g)"
                                     />
-                                    <BrewField
-                                        id="brewWaterMass"
-                                        label="Water Mass (g)"
-                                    />
-                                    <BrewField
-                                        id="brewTotalTime"
-                                        label="Total Time (s)"
-                                    />
                                     <BrewTimer
                                         key={`brewTimer_${versionKey}`}
                                         recipe={formik.values}
@@ -128,6 +120,10 @@ const BrewInput = ({ brewStore, beanStore }: Props) => {
                                                 trace.brewStages
                                             );
                                         }}
+                                    />
+                                    <BrewField
+                                        id="brewWaterMass"
+                                        label="Water Mass (g)"
                                     />
                                 </fieldset>
                                 <fieldset>
