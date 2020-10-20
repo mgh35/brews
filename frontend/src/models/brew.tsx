@@ -73,7 +73,7 @@ export const TasteSchema = yup
             .string()
             .ensure()
             .matches(/^(light|medium|heavy|)$/),
-        tasteAromas: yup.array().of(yup.string().ensure()),
+        tasteAromas: yup.array().of(yup.string().ensure().required()),
     })
     .required();
 

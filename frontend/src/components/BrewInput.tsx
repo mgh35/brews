@@ -7,6 +7,7 @@ import {
     useFormikContext,
     FormikProps,
 } from "formik";
+import Accordion from "react-bootstrap/Accordion";
 import Alert from "react-bootstrap/Alert";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
@@ -23,6 +24,7 @@ import BeanChooser from "components/BeanChooser";
 import BrewTimer from "components/BrewTimer";
 import { BrewSchema, Brew } from "models/brew";
 import styles from "./BrewInput.module.css";
+import FlavourAccordion from "./FlavourAccordion";
 
 interface Props {
     brewStore: BrewStore;
@@ -179,7 +181,20 @@ const BrewInput = ({ brewStore, beanStore }: Props) => {
                                             label="Bitter"
                                         />
                                     </FormGroup>
+                                    <Accordion>{}</Accordion>
+                                    <FormGroup>
+                                        <FlavourAccordion
+                                            value={formik.values.tasteAromas}
+                                            onChange={(aromas) =>
+                                                formik.setFieldValue(
+                                                    "tasteAromas",
+                                                    aromas
+                                                )
+                                            }
+                                        />
+                                    </FormGroup>
                                     <FormGroup controlId="tasteBody">
+                                        <FormLabel>Body</FormLabel>
                                         <Field name="tasteBody">
                                             {({ field }: FieldProps) => (
                                                 <ToggleButtonGroup
@@ -197,19 +212,19 @@ const BrewInput = ({ brewStore, beanStore }: Props) => {
                                                         value="light"
                                                         variant="outline-secondary"
                                                     >
-                                                        Light-Body
+                                                        Light
                                                     </ToggleButton>
                                                     <ToggleButton
                                                         value="medium"
                                                         variant="outline-secondary"
                                                     >
-                                                        Medium-Body
+                                                        Medium
                                                     </ToggleButton>
                                                     <ToggleButton
                                                         value="heavy"
                                                         variant="outline-secondary"
                                                     >
-                                                        Heavy-Body
+                                                        Heavy
                                                     </ToggleButton>
                                                 </ToggleButtonGroup>
                                             )}
