@@ -86,7 +86,10 @@ export class BrewsFromDynamoDb extends DynamoDbApi<Brew> {
     }
 
     _makeObjectFromDbItem(item: DbItem): Brew {
-        return item;
+        const object = Object.assign({}, item);
+        delete object.pk;
+        delete object.sk;
+        return object;
     }
 
     _getSecondaryKeyPrefix(): string {
@@ -99,16 +102,19 @@ export class BrewsFromDynamoDb extends DynamoDbApi<Brew> {
 }
 
 export class BeansFromDynamoDb extends DynamoDbApi<Bean> {
-    _makeDbItemFromObject(user: User, brew: Brew): any {
+    _makeDbItemFromObject(user: User, bean: Bean): any {
         return {
             pk: user.id,
-            sk: this._makeSecondaryKey(brew),
-            ...brew,
+            sk: this._makeSecondaryKey(bean),
+            ...bean,
         };
     }
 
-    _makeObjectFromDbItem(item: DbItem): Brew {
-        return item;
+    _makeObjectFromDbItem(item: DbItem): Bean {
+        const object = Object.assign({}, item);
+        delete object.pk;
+        delete object.sk;
+        return object;
     }
 
     _getSecondaryKeyPrefix(): string {

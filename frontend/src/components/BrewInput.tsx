@@ -32,7 +32,8 @@ interface Props {
 }
 
 const BrewInput = ({ brewStore, beanStore }: Props) => {
-    const createInitialValues = () => _createNewBrew(brewStore.getLatestBrew());
+    const createInitialValues = () =>
+        _createNewBrew(brewStore.getLatestBrew(), beanStore);
 
     const [initialValues, setInitialValues] = useState<Brew>(
         createInitialValues()
@@ -306,20 +307,18 @@ const BrewToggleButton = ({ id, label }: BrewToggleButtonProps) => {
     );
 };
 
-const _createNewBrew = (modelBrew: Brew | null): Brew => {
-    const prototypeBrew = modelBrew
-        ? {
-              beanName: modelBrew.beanName,
-              beanProducer: modelBrew.beanProducer,
-              beanRegion: modelBrew.beanRegion,
-              beanVariety: modelBrew.beanVariety,
-              beanProcess: modelBrew.beanProcess,
-              beanRoaster: modelBrew.beanRoaster,
-              beanRoastDate: modelBrew.beanRoastDate,
-              grindGrinder: modelBrew.grindGrinder,
-              grindSetting: modelBrew.grindSetting,
-          }
-        : {};
+const _createNewBrew = (modelBrew: Brew | null, beanStore: BeanStore): Brew => {
+    let prototypeBrew = {};
+    if (modelBrew) {
+        const bean = modelBrew.beanId
+            ? beanStore.getById(modelBrew.beanId)
+            : {};
+        prototypeBrew = {
+            ...bean,
+            grindGrinder: modelBrew.grindGrinder,
+            grindSetting: modelBrew.grindSetting,
+        };
+    }
 
     const recipe = new RecipeStore().getV60Recipe();
 

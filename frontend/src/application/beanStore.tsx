@@ -33,7 +33,7 @@ export class BeanStore {
         if (!beanId) {
             return undefined;
         }
-        return this.beansById[beanId];
+        return this._cloneBean(this.beansById[beanId]);
     }
 
     private _cloneBean(bean: Bean): Bean {
